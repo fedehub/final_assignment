@@ -24,9 +24,9 @@ def set_new_pos(req):
 
 
 def main():
-    rospy.init_node('_ui_')
+    rospy.init_node('ui')
 
-    srv = rospy.Service('_ui_', Empty, set_new_pos)
+    srv = rospy.Service('ui', Empty, set_new_pos)
 
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():

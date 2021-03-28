@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   move_base_msgs
   tf
+  actionlib_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -166,7 +167,7 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 
 catkin_install_python(PROGRAMS
-scripts/random_srv.py scripts/wall_follow_service_m.py scripts/bug_m.py scripts/_ui_.py scripts/go_to_point_service_m.py
+scripts/random_srv.py scripts/wall_follow_service_m.py scripts/bug_m.py scripts/ui.py scripts/go_to_point_service_m.py
 scripts/user_interface.py scripts/master_node.py 
 
 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

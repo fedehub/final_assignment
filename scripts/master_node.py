@@ -12,13 +12,14 @@ from std_srvs.srv import *
 from geometry_msgs.msg import Twist
 
 from move_base_msgs.msg import MoveBaseActionGoal
-
+from actionlib_msgs.msg import GoalID
 
 import math
 
 # commonn publisher to publish stop!
 pub_cmdvel = None
 pub_mvbase = None
+pub_goalid = None
 # services nodes
 
 srv_client_wall_follower_ = None # boolean node
@@ -58,10 +59,23 @@ def clbk_odom(msg):
     # position
     position_ = msg.pose.pose.position
 
+def target_distance():
+          global position_
+          p1 = rospy.get_param('des_pos_x')                
+          p2 = rospy.get_param('des_pos_y')
+          p3 = position_.x
+          p4 = position_.y
+          distance = math.sqrt( ((p4-p2)**2)+((p3-p1)**2) )
 
+          
+
+          return distance
+      
+   
 # decleare and publish a message of type move_based 
 
 def publish_ag():
+        
 	global pub_mvbase 
 	msg_Action_Goal = MoveBaseActionGoal() # declearing msg of type MoveBaseActionGOal
 	msg_Action_Goal.goal.target_pose.header.frame_id="map";
@@ -76,12 +90,12 @@ def publish_ag():
 	pub_mvbase.publish(msg_Action_Goal)
 	
 	return[]
-	
+
 
 def change_state():
     global state_, state_desc_
     global srv_client_wall_follower_, srv_client_random_, srv_client_ui_, pub_cmdvel, pub_mvbase
-    state_ = get_param('state')
+    state_ = rospy.get_param('state')
     log = "state changed: %s" % state_desc_[state_-1]
     rospy.loginfo(log)
 
@@ -91,7 +105,7 @@ def change_state():
         resp = srv_client_wall_follower_(False)
 	resp = srv_client_random_()
 	publish_ag() 
-	resp = srv_client_ui_()
+	
 	
     	
     # target position
@@ -110,7 +124,7 @@ def change_state():
 	rospy.set_param("des_pos_y", y)
 
 	publish_ag()
-	resp = srv_client_ui_()
+	
         
         
 
@@ -136,26 +150,43 @@ def change_state():
 def main():
     time.sleep(2)
     global position_, desired_position_, state_
-    global srv_client_ui_, srv_client_wall_follower_, srv_client_random_, pub_cmdvel, pub_mvbase
+    global srv_client_ui_, srv_client_wall_follower_, srv_client_random_, pub_cmdvel, pub_mvbase, pub_goalid
+    bool_check=True
 
     rospy.init_node('master_node')
 
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
     pub_cmdvel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-    pub_mvbase = rospy.Publisher('/move_base', MoveBaseActionGoal, queue_size=1 )
+    pub_mvbase = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=1 )
+    pub_goalid = rospy.Publisher('/move_base/cancel', GoalID, queue_size=1)
 
 
     srv_client_wall_follower_ = rospy.ServiceProxy(
         '/wall_follower_switch', SetBool)
     srv_client_random_ = rospy.ServiceProxy('/random_srv',Empty)
-    srv_client_ui_ = rospy.ServiceProxy('/_ui_', Empty)
+    srv_client_ui_ = rospy.ServiceProxy('/ui', Empty)
 
     # initialize going to the point
     change_state() # to check the numb. state 
 
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-      	change_state()
+        if bool_check == True:
+      	    change_state()
+            
+        state_=rospy.get_param('state')
+        #print(state_)
+        if state_==1 or state_==2:
+               a=target_distance()
+               if a>0.5 :
+                    bool_check = False
+                    #print(bool_check)
+               else:
+                      
+                    bool_check = True
+                    msg_goalid=GoalID()
+                    pub_goalid.publish(msg_goalid)
+                    resp = srv_client_ui_()
         rate.sleep()
 
 

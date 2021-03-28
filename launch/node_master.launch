@@ -3,28 +3,23 @@
 
 
 <launch>
-<!-- <include file="$(find final_assignment)/launch/move_base.launch"></include> -->
-<!-- <include file="$(find final_assignment)/launch/simulation_gmapping.launch"></include> -->
-<include file="$(find final_assignment)/launch/bug0.launch"></include>
+
+	<!--<include file="$(find final_assignment)/launch/bug0.launch"></include>-->
+
+
+	<arg name="des_x" default= "-4"/>
+	<arg name="des_y" default= "-3"/>
+	<arg name="state" default= "4"/>
+
+
+	<param name="des_pos_x" value="$(arg des_x)" />
+	<param name="des_pos_y" value="$(arg des_y)" />
+	<param name="state" value="$(arg state)" />
 
 
 
-
-<arg name="des_x" default= "-4"/>
-<arg name="des_y" default= "-3"/>
-<arg name="state" default= "4"/>
-<!-- <arg name="change" default= "0"/> -->
-
-<param name="des_pos_x" value="$(arg des_x)" />
-<param name="des_pos_y" value="$(arg des_y)" />
-<param name="state" value="$(arg state)" />
-<!-- <param name="change" value="$(arg change)" /> -->
-
-
-<!-- <node pkg="final_assignment" type="wall_follow_service_m.py" name="wall_follow_service"/> -->
- <node pkg="final_assignment" type="random_srv.py" name="random_srv" /> 
- <node pkg="final_assignment" type="_ui_.py" name="_ui_" output="screen" />
-
-<node pkg="final_assignment" type="master_node.py" name="master_node" output="screen"/>
-<!-- <node pkg="final_assignment" type="move_randomly_srv.py" name="move_randomly" output="screen"/>
-</launch> -->
+	<node pkg="final_assignment" type="wall_follow_service_m.py" name="wall_follow_service"/> 
+	<node pkg="final_assignment" type="random_srv.py" name="random_srv" /> 
+	<node pkg="final_assignment" type="ui.py" name="ui" output="screen" />
+	<node pkg="final_assignment" type="master_node.py" name="master_node" output="screen"/>
+</launch>

@@ -12,30 +12,30 @@ def choose_rand(req):
     	
 	number=random.randint(1,6)
 	if number == 1:
-	rospy.set_param("des_pos_x", -4)
-	rospy.set_param("des_pos_y", -3)
+		rospy.set_param("des_pos_x", -4)
+		rospy.set_param("des_pos_y", -3)
 
 	elif number == 2:
-	rospy.set_param("des_pos_x", -4)
-	rospy.set_param("des_pos_y", 2)
+		rospy.set_param("des_pos_x", -4)
+		rospy.set_param("des_pos_y", 2)
 
 	elif number == 3:
-	rospy.set_param("des_pos_x", -4)
-	rospy.set_param("des_pos_y", 7)
+		rospy.set_param("des_pos_x", -4)
+		rospy.set_param("des_pos_y", 7)
 
 	elif number == 4:
-	rospy.set_param("des_pos_x", 5)
-	rospy.set_param("des_pos_y", -7)
+		rospy.set_param("des_pos_x", 5)
+		rospy.set_param("des_pos_y", -7)
 
 	elif number == 5:
-	rospy.set_param("des_pos_x", 5)
-	rospy.set_param("des_pos_y", -3)
+		rospy.set_param("des_pos_x", 5)
+		rospy.set_param("des_pos_y", -3)
 
 	elif number == 6:
-	rospy.set_param("des_pos_x", 5)
-	rospy.set_param("des_pos_y", 1)
+		rospy.set_param("des_pos_x", 5)
+		rospy.set_param("des_pos_y", 1)
 
-    return []
+        return []
 
 
 def main():
