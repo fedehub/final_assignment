@@ -25,6 +25,7 @@ pub_goalid = None
 srv_client_wall_follower_ = None # boolean node
 srv_client_ui_ = None
 srv_client_random_ = None
+srv_client_bug_ = None
 
 # actual robot position (global)
 position_ = Point()
@@ -36,7 +37,7 @@ desired_position_.z = 0
 
 # state descriptions 
 
-state_desc_ = ['move randomly', 'target postion', 'walls following', 'stop']
+state_desc_ = ['move randomly', 'target postion', 'walls following', 'stop','bug']
 
 # getting the state
 state_= rospy.get_param('state')
@@ -48,6 +49,8 @@ state_= rospy.get_param('state')
 # 3 - walls following
 
 # 4 - stop
+
+# 5 - bug
 
 # callbacks
 
@@ -94,23 +97,23 @@ def publish_ag():
 
 def change_state():
     global state_, state_desc_
-    global srv_client_wall_follower_, srv_client_random_, srv_client_ui_, pub_cmdvel, pub_mvbase
+    global srv_client_wall_follower_, srv_client_random_,  srv_client_bug_,srv_client_ui_, pub_cmdvel, pub_mvbase
     state_ = rospy.get_param('state')
     log = "state changed: %s" % state_desc_[state_-1]
     rospy.loginfo(log)
 
 
-    # move randomly
+    # 1 - move randomly
     if state_ == 1:
         resp = srv_client_wall_follower_(False)
+        resp = srv_client_bug_(False)
 	resp = srv_client_random_()
 	publish_ag() 
-	
-	
     	
-    # target position
+    # 2 - target position
     if state_ == 2:
 	resp = srv_client_wall_follower_(False)
+        resp = srv_client_bug_(False)
 	print('Please, insert the desired target position between: [(-4,-3);(-4,2);(-4,7);(5,-7);(5,-3);(5,1)] ')
 	
 	x = float(raw_input('x:'))
@@ -131,12 +134,14 @@ def change_state():
     # walls following 
     if state_ == 3:
 	resp = srv_client_wall_follower_(True)
+        resp = srv_client_bug_(False)
 	resp = srv_client_ui_()
 	
 
-    # stop
+    # 4 - stop
     if state_ == 4: 
 	resp = srv_client_wall_follower_(False)
+        resp = srv_client_bug_(False)
         twist_msg = Twist()
         twist_msg.linear.x = 0
 	twist_msg.linear.y = 0 
@@ -145,13 +150,17 @@ def change_state():
 	print("Robot position (stopped at): x= "+ str(position_.x) +" y=" + str(position_.y))
         resp = srv_client_ui_()
 
-
+    # 5 - bug algorithm 
+    if state_==5:
+         resp = srv_client_wall_follower_(False)
+         resp = srv_client_bug_(True)
+         #resp = srv_client_ui_()
 
 def main():
     time.sleep(2)
     global position_, desired_position_, state_
-    global srv_client_ui_, srv_client_wall_follower_, srv_client_random_, pub_cmdvel, pub_mvbase, pub_goalid
-    bool_check=True
+    global srv_client_ui_, srv_client_wall_follower_, srv_client_bug_,srv_client_random_, pub_cmdvel, pub_mvbase, pub_goalid
+    #bool_check=True
 
     rospy.init_node('master_node')
 
@@ -165,13 +174,14 @@ def main():
         '/wall_follower_switch', SetBool)
     srv_client_random_ = rospy.ServiceProxy('/random_srv',Empty)
     srv_client_ui_ = rospy.ServiceProxy('/ui', Empty)
-
+    srv_client_bug_ = rospy.ServiceProxy('/bug_alg', SetBool)
     # initialize going to the point
     change_state() # to check the numb. state 
 
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        if bool_check == True:
+        bool_check=rospy.get_param('bool_check')
+        if bool_check == 1:
       	    change_state()
             
         state_=rospy.get_param('state')
@@ -179,14 +189,18 @@ def main():
         if state_==1 or state_==2:
                a=target_distance()
                if a>0.5 :
-                    bool_check = False
+                    rospy.set_param('bool_check',0)
+                    #bool_check = False
                     #print(bool_check)
                else:
-                      
-                    bool_check = True
+                    rospy.set_param('bool_check',1) 
+                    #bool_check = True
                     msg_goalid=GoalID()
                     pub_goalid.publish(msg_goalid)
                     resp = srv_client_ui_()
+        if state_==5:
+              rospy.set_param('bool_check',0)
+              #bool_check = False
         rate.sleep()
 
 

@@ -168,7 +168,7 @@ include_directories(
 
 catkin_install_python(PROGRAMS
 scripts/random_srv.py scripts/wall_follow_service_m.py scripts/bug_m.py scripts/ui.py scripts/go_to_point_service_m.py
-scripts/user_interface.py scripts/master_node.py 
+scripts/user_interface.py scripts/master_node.py scripts/wall_follower_bug.py
 
 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

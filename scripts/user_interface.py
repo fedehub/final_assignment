@@ -22,8 +22,8 @@ def main():
 
     x = rospy.get_param("des_pos_x")
     y = rospy.get_param("des_pos_y")
-    print("Hi! We are reaching the first position: x = " +
-          str(x) + ", y = " + str(y))
+    #print("Hi! We are reaching the first position: x = " +
+          #str(x) + ", y = " + str(y))
     srv = rospy.Service('user_interface', Empty, set_new_pos)
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():

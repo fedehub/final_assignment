@@ -4,17 +4,19 @@
 
 <launch>
 
-	<!--<include file="$(find final_assignment)/launch/bug0.launch"></include>-->
+	<include file="$(find final_assignment)/launch/bug0.launch"></include>
 
 
 	<arg name="des_x" default= "-4"/>
 	<arg name="des_y" default= "-3"/>
 	<arg name="state" default= "4"/>
+        <arg name="bool_check" default= "1"/>
 
 
 	<param name="des_pos_x" value="$(arg des_x)" />
 	<param name="des_pos_y" value="$(arg des_y)" />
 	<param name="state" value="$(arg state)" />
+        <param name="bool_check" value="$(arg bool_check)" />
 
 
 

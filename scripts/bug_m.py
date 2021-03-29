@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
-import time
+import time # for using sleep() function
 # import ros message
 from geometry_msgs.msg import Point
 from sensor_msgs.msg import LaserScan
@@ -14,6 +14,7 @@ from geometry_msgs.msg import Twist
 import math
 
 pub = None
+srv_client_ui_=None
 srv_client_go_to_point_ = None
 srv_client_wall_follower_ = None
 srv_client_user_interface_ = None
@@ -27,11 +28,12 @@ desired_position_.z = 0
 regions_ = None
 state_desc_ = ['Go to point', 'wall following', 'target reached']
 state_ = 0
+first=True
 # 0 - go to point
 # 1 - wall following
 
 # callbacks
-
+active_=False
 
 def clbk_odom(msg):
     global position_, yaw_
@@ -59,6 +61,15 @@ def clbk_laser(msg):
         'left':   min(min(msg.ranges[576:719]), 10),
     }
 
+def active_bug(req):
+    global active_
+    active_ = req.data
+    if active_==False:
+        first = True 
+    res = SetBoolResponse()
+    res.success = True
+    res.message = 'Done!'
+    return res
 
 def change_state(state):
     global state_, state_desc_
@@ -79,8 +90,9 @@ def change_state(state):
         twist_msg.linear.x = 0
         twist_msg.angular.z = 0
         pub.publish(twist_msg)
-        resp = srv_client_user_interface_()
-
+        
+           
+        
 
 def normalize_angle(angle):
     if(math.fabs(angle) > math.pi):
@@ -91,8 +103,8 @@ def normalize_angle(angle):
 def main():
     time.sleep(2)
     global regions_, position_, desired_position_, state_, yaw_, yaw_error_allowed_
-    global srv_client_go_to_point_, srv_client_wall_follower_, srv_client_user_interface_, pub
-
+    global srv_client_go_to_point_, srv_client_wall_follower_, srv_client_user_interface_, pub,srv_client_ui_
+    global active_,first
     rospy.init_node('bug0')
 
     sub_laser = rospy.Subscriber('/scan', LaserScan, clbk_laser)
@@ -102,45 +114,82 @@ def main():
     srv_client_go_to_point_ = rospy.ServiceProxy(
         '/go_to_point_switch', SetBool)
     srv_client_wall_follower_ = rospy.ServiceProxy(
-        '/wall_follower_switch', SetBool)
+        '/wall_follower_bug', SetBool)
     srv_client_user_interface_ = rospy.ServiceProxy('/user_interface', Empty)
+    srv = rospy.Service('bug_alg', SetBool, active_bug)
+    srv_client_ui_ = rospy.ServiceProxy('/ui', Empty)
 
     # initialize going to the point
-    change_state(0)
+    change_state(2)
 
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        if regions_ == None:
+      if active_== False:
             continue
+      else:
+        # getting the actual clock time
+        clock_time = time.clock()
+        # initializing expired_time
+        expired_time = clock_time - clock_start
+        # if time_elapsed is over 1 minute, 
+        if expired_time > 60:
+            first = True
+            active_ = False 
+            # blocking the robot
+            change_state(2)
+            print ('Unfortunatelly the target is not reachable! If you want to exploit the bug algorithm, please insert: 5')
+            rospy.set_param('bool_check',1)
+            # calling our ui
+            resp=srv_client_ui_()
+        
+        # going on 
+        else:
+            if regions_ == None:
+                continue
 
-        if state_ == 0:
-            err_pos = math.sqrt(pow(desired_position_.y - position_.y,
-                                    2) + pow(desired_position_.x - position_.x, 2))
-            if(err_pos < 0.3):
-                change_state(2)
+            if state_ == 0:
+                err_pos = math.sqrt(pow(desired_position_.y - position_.y,
+                                        2) + pow(desired_position_.x - position_.x, 2))
+                if(err_pos < 0.3):
+                    change_state(2)
 
-            elif regions_['front'] < 0.5:
-                change_state(1)
+                elif regions_['front'] < 0.5:
+                    change_state(1)
 
-        elif state_ == 1:
-            desired_yaw = math.atan2(
-                desired_position_.y - position_.y, desired_position_.x - position_.x)
-            err_yaw = normalize_angle(desired_yaw - yaw_)
-            err_pos = math.sqrt(pow(desired_position_.y - position_.y,
-                                    2) + pow(desired_position_.x - position_.x, 2))
+            elif state_ == 1:
+                desired_yaw = math.atan2(
+                    desired_position_.y - position_.y, desired_position_.x - position_.x)
+                err_yaw = normalize_angle(desired_yaw - yaw_)
+                err_pos = math.sqrt(pow(desired_position_.y - position_.y,
+                                        2) + pow(desired_position_.x - position_.x, 2))
 
-            if(err_pos < 0.3):
-                change_state(2)
-            if regions_['front'] > 1 and math.fabs(err_yaw) < 0.05:
-                change_state(0)
+                if(err_pos < 0.3):
+                    change_state(2)
+                if regions_['front'] > 1 and math.fabs(err_yaw) < 0.05:
+                    change_state(0)
 
-        elif state_ == 2:
-            desired_position_.x = rospy.get_param('des_pos_x')
-            desired_position_.y = rospy.get_param('des_pos_y')
-            err_pos = math.sqrt(pow(desired_position_.y - position_.y,
-                                    2) + pow(desired_position_.x - position_.x, 2))
-            if(err_pos > 0.35):
-                change_state(0)
+            elif state_ == 2:
+                if first==False:
+                rospy.set_param('bool_check',1)
+                print('target has been reached! If you want to exploit the bug algorithm, please insert: 5')
+                resp=srv_client_ui_()
+                
+                # if first = true (if it is the first time, i call the user_interface)   
+                resp = srv_client_user_interface_()
+                # starting the clock
+                clock_start = time.clock() 
+                time.sleep(2)
+                
+                # the second time i got in the loop, first will be initialize as false
+                # and i will go back to the if loop above 
+                first=False
+
+                desired_position_.x = rospy.get_param('des_pos_x')
+                desired_position_.y = rospy.get_param('des_pos_y')
+                err_pos = math.sqrt(pow(desired_position_.y - position_.y,
+                                        2) + pow(desired_position_.x - position_.x, 2))
+                if(err_pos > 0.35):
+                    change_state(0)
 
         rate.sleep()
 

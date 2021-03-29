@@ -14,6 +14,7 @@ def set_new_pos(req):
     print("Second state: (state 2) - target position")
     print("Third state: (state 3) -  walls following")
     print("Fourth state: (state 4) - stop")
+    print("Fifth state: (state 5) - bug algorithm")
 			  
     # check between 1 and 4 after 20 line 
     state = int(raw_input('chosen state: '))	
