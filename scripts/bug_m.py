@@ -29,6 +29,7 @@ regions_ = None
 state_desc_ = ['Go to point', 'wall following', 'target reached']
 state_ = 0
 first=True
+clock_start=0
 # 0 - go to point
 # 1 - wall following
 
@@ -74,6 +75,7 @@ def active_bug(req):
 def change_state(state):
     global state_, state_desc_
     global srv_client_wall_follower_, srv_client_go_to_point_
+    global clock_start
     state_ = state
     log = "state changed: %s" % state_desc_[state]
     rospy.loginfo(log)
@@ -90,8 +92,8 @@ def change_state(state):
         twist_msg.linear.x = 0
         twist_msg.angular.z = 0
         pub.publish(twist_msg)
-        
-           
+        clock_start=time.clock()
+        print(clock_start)   
         
 
 def normalize_angle(angle):
@@ -104,7 +106,7 @@ def main():
     time.sleep(2)
     global regions_, position_, desired_position_, state_, yaw_, yaw_error_allowed_
     global srv_client_go_to_point_, srv_client_wall_follower_, srv_client_user_interface_, pub,srv_client_ui_
-    global active_,first
+    global active_,first,clock_start
     rospy.init_node('bug0')
 
     sub_laser = rospy.Subscriber('/scan', LaserScan, clbk_laser)
@@ -132,13 +134,14 @@ def main():
         # initializing expired_time
         expired_time = clock_time - clock_start
         # if time_elapsed is over 1 minute, 
-        if expired_time > 60:
+        print(expired_time)
+        if expired_time > 20:
             first = True
             active_ = False 
             # blocking the robot
             change_state(2)
             print ('Unfortunatelly the target is not reachable! If you want to exploit the bug algorithm, please insert: 5')
-            rospy.set_param('bool_check',1)
+            #rospy.set_param('bool_check',1)
             # calling our ui
             resp=srv_client_ui_()
         
@@ -170,14 +173,15 @@ def main():
 
             elif state_ == 2:
                 if first==False:
-                rospy.set_param('bool_check',1)
-                print('target has been reached! If you want to exploit the bug algorithm, please insert: 5')
-                resp=srv_client_ui_()
+		        #rospy.set_param('bool_check',1)
+		        print('target has been reached! If you want to exploit the bug algorithm, please insert: 5')
+		        resp=srv_client_ui_()
                 
                 # if first = true (if it is the first time, i call the user_interface)   
                 resp = srv_client_user_interface_()
                 # starting the clock
                 clock_start = time.clock() 
+                print(clock_start)
                 time.sleep(2)
                 
                 # the second time i got in the loop, first will be initialize as false

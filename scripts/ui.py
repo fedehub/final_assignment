@@ -19,6 +19,15 @@ def set_new_pos(req):
     # check between 1 and 4 after 20 line 
     state = int(raw_input('chosen state: '))	
     
+
+    while state not in range(1,5):
+         print('Please, insert an available status!')
+         state = int(raw_input('chosen state: '))
+    # second check
+   # while for state in states:
+		 #if isistance(state,str) :
+		  #  print('Please, insert a valid int ')
+		   # state = int(raw_input('chosen state: '))
     rospy.set_param("state", state)
     print("State has been succesfully chosen")
     return []
