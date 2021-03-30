@@ -4,30 +4,40 @@
 import rospy
 from std_srvs.srv import *
 
+# Cheking the user input 
+def check_user_input(input):
+    try:
+        # Convert it into integer
+        temp_val = int(input)
+        if temp_val in range(1,5):
+            print("Input is a valid integer number.\n Saving state:", temp_val)
+            state = temp_val
+        else :
+            print("Input is not belonging to the range 1, 5")
+    except ValueError:
+        try:
+            # Convert it into float
+            temp_val = float(input)
+            print("Input is a float  number. Please, enter an integer one")
+        except ValueError:
+            print("Input is a string instead of a number. \n I am exiting the program!")
+
+
 # service callback
-
-
 def set_new_pos(req):
-    print("Please insert the desired robot state: ")
-    print("Available states: ")
-    print("First state: (state 1)- move randomly")
-    print("Second state: (state 2) - target position")
-    print("Third state: (state 3) -  walls following")
-    print("Fourth state: (state 4) - stop")
-    print("Fifth state: (state 5) - bug algorithm")
+    print("Please insert the desired robot state: \n")
+    print("Available states: \n")
+    print("First state: (state 1)- move randomly \n")
+    print("Second state: (state 2) - target position \n")
+    print("Third state: (state 3) -  walls following \n")
+    print("Fourth state: (state 4) - stop \n")
+    print("Fifth state: (state 5) - bug algorithm \n")
 			  
     # check between 1 and 4 after 20 line 
-    state = int(raw_input('chosen state: '))	
-    
+    state = input("Enter a state by specifying an integer between 1 and 5:\n")
+    # ensuring right entrance by the user 
+    check_user_input(state)
      
-    #while state not in range(1,5):
-         #print('Please, insert an available status!')
-         #state = int(raw_input('chosen state: '))
-    # second check
-   # while for state in states:
-		 #if isistance(state,str) :
-		  #  print('Please, insert a valid int ')
-		   # state = int(raw_input('chosen state: '))
     rospy.set_param("state", state)
     #the state has been changed
     rospy.set_param('change_state',1)
