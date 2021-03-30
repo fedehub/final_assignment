@@ -101,7 +101,7 @@ def change_state():
     state_ = rospy.get_param('state')
     log = "state changed: %s" % state_desc_[state_-1]
     rospy.loginfo(log)
-
+    change_state=rospy.set_param('change_state',0)
 
     # 1 - move randomly
     if state_ == 1:
@@ -161,7 +161,7 @@ def main():
     global position_, desired_position_, state_
     global srv_client_ui_, srv_client_wall_follower_, srv_client_bug_,srv_client_random_, pub_cmdvel, pub_mvbase, pub_goalid
     #bool_check=True
-
+    new_state=0
     rospy.init_node('master_node')
 
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
@@ -180,27 +180,27 @@ def main():
 
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        bool_check=rospy.get_param('bool_check')
-        if bool_check == 1:
-      	    change_state()
-            
-        state_=rospy.get_param('state')
-        #print(state_)
-        if state_==1 or state_==2:
-               a=target_distance()
-               if a>0.5 :
-                    rospy.set_param('bool_check',0)
-                    #bool_check = False
-                    #print(bool_check)
-               else:
-                    rospy.set_param('bool_check',1) 
-                    #bool_check = True
-                    msg_goalid=GoalID()
-                    pub_goalid.publish(msg_goalid)
-                    resp = srv_client_ui_()
-        if state_==5:
-              rospy.set_param('bool_check',0)
-              #bool_check = False
+        #se lo stato viene cambiato (puo essere cambiato solo da dentro ui dopo aver inserito un input) il parametro e =1 
+        #quindi  vado su in change_state() a settare il nuovo stato
+        #NOTA: dentro change_state() risetto il parametro change_state=0
+        #se lo stato non è stato aggiornato  quindi change_state=0 controllo se il mio stato e 0 o 1 aspetto prima di pubblicare lo ui (come prima)
+        
+        
+	new_state=rospy.get_param('change_state')
+	if new_state == 1:
+	      	    change_state()
+		    
+	else:
+	        state_=rospy.get_param('state')
+		
+		if state_==1 or state_==2:
+		       a=target_distance()
+                       if a<0.5 :
+
+		            msg_goalid=GoalID()
+		            pub_goalid.publish(msg_goalid)
+		            resp = srv_client_ui_()
+
         rate.sleep()
 
 

@@ -93,7 +93,7 @@ def change_state(state):
         twist_msg.angular.z = 0
         pub.publish(twist_msg)
         clock_start=time.clock()
-        print(clock_start)   
+        #print(clock_start)   
         
 
 def normalize_angle(angle):
@@ -134,7 +134,7 @@ def main():
         # initializing expired_time
         expired_time = clock_time - clock_start
         # if time_elapsed is over 1 minute, 
-        print(expired_time)
+        #print(expired_time)
         if expired_time > 20:
             first = True
             active_ = False 
@@ -181,7 +181,7 @@ def main():
                 resp = srv_client_user_interface_()
                 # starting the clock
                 clock_start = time.clock() 
-                print(clock_start)
+                #print(clock_start)
                 time.sleep(2)
                 
                 # the second time i got in the loop, first will be initialize as false
