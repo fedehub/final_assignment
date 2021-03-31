@@ -196,17 +196,17 @@ def change_state():
         resp = srv_client_wall_follower_(False)
         resp = srv_client_bug_(False)
         resp = srv_client_random_()
-	    publish_ag()
+	publish_ag()
 
     # 2 - target position
     if state_ == 2:
 	    resp = srv_client_wall_follower_(False)
-        resp = srv_client_bug_(False)
+            resp = srv_client_bug_(False)
 	    print('Please, insert the desired target position between: [(-4,-3);(-4,2);(-4,7);(5,-7);(5,-3);(5,1)] ')
 
-        # For x coordinates
-        print(' Available x coordinates: [-4,5]')
-        while True:
+            # For x coordinates
+            print(' Available x coordinates: [-4,5]')
+            while True:
     		    input_number_x = input('Please, follow these instructions.\n 1. Enter a valid x coordinate.\n 2. Press enter. \n Once "valid state!" message appears, digit "done"\n')
     		    if input_number_x == 'done':
     		        # exit the while loop
@@ -223,10 +223,10 @@ def change_state():
     		    # checking
     		    print("x value is:", x)
 
-        # For y coordinates
-        # Once y has been entered by the user, we compute a
-        # double checking upon x and y coordinates
-        if x_number == 5:
+            # For y coordinates
+            # Once y has been entered by the user, we compute a
+            # double checking upon x and y coordinates
+            if x_number == 5:
 		    print(' Available y coordinates: [-7,-3,1]')
 		        # Stays in loop until break
 		    while True:
@@ -247,7 +247,7 @@ def change_state():
 		        print("y value is:", y)
 
 
-        if x_number == -4:
+            if x_number == -4:
 		    print(' Available y coordinates: [2,-3,7]')
 		        # Stays in loop until break
 		    while True:
@@ -277,20 +277,20 @@ def change_state():
     # walls following
     if state_ == 3:
 	    resp = srv_client_wall_follower_(True)
-        resp = srv_client_bug_(False)
+            resp = srv_client_bug_(False)
 	    resp = srv_client_ui_()
 
 
     # 4 - stop
     if state_ == 4:
-	    resp = srv_client_wall_follower_(False)
+	resp = srv_client_wall_follower_(False)
         resp = srv_client_bug_(False)
         twist_msg = Twist()
         twist_msg.linear.x = 0
-	    twist_msg.linear.y = 0
+	twist_msg.linear.y = 0
         twist_msg.angular.z = 0
         pub_cmdvel.publish(twist_msg)
-	    print("Robot position (stopped at): x= "+ str(position_.x) +" y=" + str(position_.y))
+	print("Robot position (stopped at): x= "+ str(position_.x) +" y=" + str(position_.y))
         resp = srv_client_ui_()
 
     # 5 - bug algorithm
@@ -340,7 +340,7 @@ def main():
     	else:
     	    state_=rospy.get_param('state')
             if state_==1 or state_==2:
-    		        a=target_distance()
+    		    a=target_distance()
                     if a<0.5 :
     		            msg_goalid=GoalID()
     		            pub_goalid.publish(msg_goalid)

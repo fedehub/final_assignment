@@ -20,7 +20,7 @@
 
 
 
-	<node pkg="final_assignment" type="wall_follow_service_m.py" name="wall_follow_service"/> 
+	<node pkg="final_assignment" type="wall_follower_service_m.py" name="wall_follow_service"/> 
 	<node pkg="final_assignment" type="random_srv.py" name="random_srv" /> 
 	<node pkg="final_assignment" type="ui.py" name="ui" output="screen" />
 	<node pkg="final_assignment" type="master_node.py" name="master_node" output="screen"/>

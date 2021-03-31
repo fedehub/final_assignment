@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 ## @package wall_follower_service_m
-#  Documentation for the master_node module.
+#  Documentation for the wall_follower_service_m.py module.
 #
 #  More details.
 #
