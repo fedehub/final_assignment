@@ -59,21 +59,31 @@ In the list below, the **subscribed messages** of the whole architecture are rep
 
 As far as services are concerned, I have here-reported a quick explanation of their purposes:
 
-1. Within the [random_srv.py](https://github.com/fedehub/final_assignment/tree/main/scripts/random_srv.py) script, there is the **/random_srv** service. Its purpose is to choose between six different coordinate positions
+1. Within the [random_srv.py](https://github.com/fedehub/final_assignment/tree/main/scripts/random_srv.py) script, there is the `/random_srv` service. Its purpose is to choose between six different coordinate positions
 
-2. Within  the [go_to_point_service_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/go_to_point_service_m.py) script, there is  the **/go_to_point_switch** service. Its purpose is to _activate/deactivate_ the `go-to-point` behaviour
+2. Within  the [go_to_point_service_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/go_to_point_service_m.py) script, there is  the `/go_to_point_switch` service. Its purpose is to _activate/deactivate_ the **go-to-point** behaviour
 
-3. Within the [ui.py](https://github.com/fedehub/final_assignment/tree/main/scripts/ui.py) script, we find the **/ui** service. its purpose consists in providing a tool for selecting one out of the `five` possible robot states.
+3. Within the [ui.py](https://github.com/fedehub/final_assignment/tree/main/scripts/ui.py) script, we find the `/ui` service. its purpose consists in providing a tool for selecting one out of the **five** possible robot states. In the table below, it is possible to spot what, the different states implement:
 
-4. Within the [user_interface.py](https://github.com/fedehub/final_assignment/tree/main/scripts/user_interface.py) script, we find the **/user_interface service**. Its purpose basically consists in providing a tool for selecting the _x,y coordinates_ of the next desired robot target position, once the previous target has been reached. Moreover, this is the _user-interface_ exploited by the `bug algorithm`
+_state_ | _Coordinates_
+------------ | -------------
+**state 1** | move randomly
+**state 2** | target position
+**state 3** | walls following
+**state 4** | stop
+**state 5** | bug algorithm
 
-5. Within the [wall_follower_service_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_service_m.py) script, we find the **/wall_follower_switch** service. Its purpose is to  _activate/deactivate_  the `wall-follower`behaviour
+> _REMARK:_ If `state 5` is chosen, I have implemented a sort of _timer_ which allows the user to pick up another new target by means of a user-interface if an inserted target is not reachable. Once the target position has been reached or once the settled timer's time (20 secs, in my implementation) has expired, the program exits the bug state
 
-6. Within the [wall_follower_bug.py](https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_bug.py) script, we find the **/wall_follower_bug** service.  
-Its purpose is to  _activate/deactivate_  the `wall-follower` behaviour.
+4. Within the [user_interface.py](https://github.com/fedehub/final_assignment/tree/main/scripts/user_interface.py) script, we find the `/user_interface service`. Its purpose basically consists in providing a tool for selecting the _x,y coordinates_ of the next desired robot target position, once the previous target has been reached. Moreover, this is the _user-interface_ exploited by the **bug algorithm**
+
+5. Within the [wall_follower_service_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_service_m.py) script, we find the `/wall_follower_switch` service. Its purpose is to  _activate/deactivate_  the **wall-follower** behaviour
+
+6. Within the [wall_follower_bug.py](https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_bug.py) script, we find the `/wall_follower_bug` service.  
+Its purpose is to  _activate/deactivate_  the **wall-follower** behaviour.
 > _REMARK:_ This is the service exploited by the `bug algorithm`!
 
-7. Within the [bug_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/bug_m.py) script, we find the **/bug_alg** service. Its purpose is to  _activate/deactivate_ the `bug algorithm` behaviour (through a boolean value)
+7. Within the [bug_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/bug_m.py) script, we find the `/bug_alg` service. Its purpose is to  _activate/deactivate_ the **bug algorithm** behaviour (through a boolean value)
 
 ## Nodes
 
@@ -97,13 +107,13 @@ It provides a service for avoiding the collision between our robot and the neigh
 As its name suggests, it provides a service for simulating the wall following behaviour
 
 6. [go_to_point_service_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/go_to_point_service_m.py)
-It provides a service for making the **bug algorithm*** capable of implementing the `go-to-point` behaviour  
+It provides a service for making the **bug algorithm*** capable of implementing the **go-to-point** behaviour  
 
 7. [random_srv.py](https://github.com/fedehub/final_assignment/tree/main/scripts/random_srv.py)
 It provides a straightforward service, for setting a **random position** which the robot will achieve
 
 8. [bug_m.py](https://github.com/fedehub/final_assignment/tree/main/scripts/bug_m.py)
-It provides a service for carrying out the `bug algorithm` behaviour
+It provides a service for carrying out the **bug algorithm** behaviour
 
 ## Parameters
 
@@ -114,12 +124,38 @@ They are contained in the [launch](https://github.com/fedehub/final_assignment/t
   * `state` for individuating the current state (between _1 and 5_) of the robot
   * `change_state` for initialising at _zero_ the current state of our robot. It has been proven very useful during the implementation of the **bug algorithm**
 
-## Launch files
+# How to launch
+
+1. Firstly, create a folder named _"final_assignment"_
+2. Within the aforementioned folder, open the terminal and run:
+
+```
+git clone https://github.com/fedehub/final_assignment/
+```
+3. Then, to launch the _3D visualizer Rviz_ and the _3D simulator Gazebo_ please run the command
+```
+roslaunch final_assignment simulation_gmapping.launch
+```
+4. To launch the _move_base.launch_, digit:
+
+```
+roslaunch final_assignment move_base.launch
+
+```
+5. To conclude with, digit:
+
+```
+roslaunch final_assignment.launch
+
+```
 
 
 ## Documentation
 
 The documentation of this project, obtained by means of **DoxyGen** is visible, within the [docs](https://github.com/fedehub/final_assignment/tree/main/docs) folder
+
+## System limitation's and possible Improvements
+
 
 ## Release History
 

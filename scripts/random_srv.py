@@ -3,13 +3,11 @@
 # import ros stuff
 import rospy
 from std_srvs.srv import *
-import random 
+import random
 
 # service callback
-
-
 def choose_rand(req):
-    	
+
 	number=random.randint(1,6)
 	if number == 1:
 		rospy.set_param("des_pos_x", -4)

@@ -20,6 +20,7 @@ srv_client_wall_follower_ = None
 srv_client_user_interface_ = None
 yaw_ = 0
 yaw_error_allowed_ = 5 * (math.pi / 180)  # 5 degrees
+
 position_ = Point()
 desired_position_ = Point()
 desired_position_.x = rospy.get_param('des_pos_x')
@@ -66,7 +67,7 @@ def active_bug(req):
     global active_
     active_ = req.data
     if active_==False:
-        first = True 
+        first = True
     res = SetBoolResponse()
     res.success = True
     res.message = 'Done!'
@@ -93,8 +94,8 @@ def change_state(state):
         twist_msg.angular.z = 0
         pub.publish(twist_msg)
         clock_start=time.clock()
-        #print(clock_start)   
-        
+        #print(clock_start)
+
 
 def normalize_angle(angle):
     if(math.fabs(angle) > math.pi):
@@ -133,19 +134,19 @@ def main():
         clock_time = time.clock()
         # initializing expired_time
         expired_time = clock_time - clock_start
-        # if time_elapsed is over 1 minute, 
+        # if time_elapsed is over 1 minute,
         #print(expired_time)
         if expired_time > 20:
             first = True
-            active_ = False 
+            active_ = False
             # blocking the robot
             change_state(2)
             print ('Unfortunatelly the target is not reachable! If you want to exploit the bug algorithm, please insert: 5')
             #rospy.set_param('bool_check',1)
             # calling our ui
             resp=srv_client_ui_()
-        
-        # going on 
+
+        # going on
         else:
             if regions_ == None:
                 continue
@@ -176,16 +177,16 @@ def main():
 		        #rospy.set_param('bool_check',1)
 		        print('target has been reached! If you want to exploit the bug algorithm, please insert: 5')
 		        resp=srv_client_ui_()
-                
-                # if first = true (if it is the first time, i call the user_interface)   
+
+                # if first = true (if it is the first time, i call the user_interface)
                 resp = srv_client_user_interface_()
                 # starting the clock
-                clock_start = time.clock() 
+                clock_start = time.clock()
                 #print(clock_start)
                 time.sleep(2)
-                
+
                 # the second time i got in the loop, first will be initialize as false
-                # and i will go back to the if loop above 
+                # and i will go back to the if loop above
                 first=False
 
                 desired_position_.x = rospy.get_param('des_pos_x')
