@@ -145,7 +145,7 @@ roslaunch final_assignment move_base.launch
 5. To conclude with, digit:
 
 ```
-roslaunch final_assignment.launch
+roslaunch final_assignment node_master.launch
 
 ```
 
