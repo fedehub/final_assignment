@@ -85,45 +85,47 @@ def publish_ag():
 	
 	return[]
 
-def check_user_input_x(input):
+def check_for_input_x(input_number_x, exit = True):
+    """
+    Checks if the type of "input1" is a float and returns the value if so.
+    Input:    input1 -- variable to check
+    Output: val -- value of float
+    """
     try:
-        # Convert it into integer
-        temp_val = float(input)
         x_available = [-4,5]
-        if temp_val in x_available:
-            print("Input is a valid integer number.\n Saving x coordinate5..", temp_val)
-            x = temp_val
-        else :
-            print("Input is not belonging to the available ones")
+        value = float(input_number_x)
+        # Only allows input floats   
+        if value in x_available:
+            return value 
+        else:
+            print("Please, enter a state between those available")
+            return False
+    except (ValueError, TypeError):
+        print('Error, please enter a numeric input within those available!')
+        if exit:
+            quit()
+        return False
 
-    except ValueError:
-        try:
-            # Convert it into float
-            temp_val = float(input)
-            print("Input is a float  number. Please, enter an integer one")
-        except ValueError:
-            print("Input is a string instead of a number. \n I am exiting the program!")
-
-def check_user_input_y(input):
+def check_for_input_y(input_number_y, exit = True):
+    """
+    Checks if the type of "input1" is a float and returns the value if so.
+    Input:    input1 -- variable to check
+    Output: val -- value of float
+    """
     try:
-        # Convert it into integer
-        temp_val = float(input)
-        y_available = [-3,3,7,-7,-3-1]
-        
-        if temp_val in y_available:
-            print("Input is a valid integer number.\n Saving y coordinate..", temp_val)
-            y = temp_val
-        else :
-            print("Input is not belonging to the available ones")
-
-    except ValueError:
-        try:
-            # Convert it into float
-            temp_val = float(input)
-            print("Input is a float  number. Please, enter an integer one")
-        except ValueError:
-            print("Input is a string instead of a number. \n I am exiting the program!")
-
+        x_available = [-4,5]
+        value = float(input_number_y)
+        # Only allows input floats   
+        if value in x_available:
+            return value 
+        else:
+            print("Please, enter a state between those available")
+            return False
+    except (ValueError, TypeError):
+        print('Error, please enter a numeric input within those available!')
+        if exit:
+            quit()
+        return False
 
 def change_state():
     global state_, state_desc_
@@ -145,15 +147,48 @@ def change_state():
 	    resp = srv_client_wall_follower_(False)
         resp = srv_client_bug_(False)
 	    print('Please, insert the desired target position between: [(-4,-3);(-4,2);(-4,7);(5,-7);(5,-3);(5,1)] ')
-        print(' Available x coordinates: [-4,5]')
+       
+        # For x coordinates 
+        print(' Available x coordinates: [-4,5]')                       
+        while True:                               
+            input_number_x = input('Please, follow these instructions.\n 1. Enter a valid x coordinate.\n 2. Press enter. \n Once "valid state!" message appears, digit "done"\n')
+            if input_number_x == 'done':
+                # exit the while loop 
+                break                             
+
+            x_number = check_for_input_x(input_number_x, False)
+            if not x_number:
+                continue
         
+                                    
+            print("valid state:", x_number)
+            # initializing state
+            x = x_number
+            # checking
+            print("x value is:", x)
+
+        # For y coordinates
         print(' Available y coordinates: [-3,3,7,-7,-3-1]')
-	    x = input("Enter a valid x coordinate::\n")
-        #checking correctness of user input
-        check_user_input_x(x)
-	    y = input("Enter a valid y coordinate:\n")
-        # checking the correctness of user input
-        check_user_input_y(y)
+                # Stays in loop until break
+        while True:                               
+            input_number_y = input('Please, follow these instructions.\n 1. Enter a valid x coordinate.\n 2. Press enter. \n Once "valid state!" message appears, digit "done"\n')
+            if input_number_y == 'done':
+                # exit the while loop 
+                break                             
+
+            y_number = check_for_input_y(input_number_y, False)
+            if not y_number:
+                continue
+        
+                                    
+            print("valid state:", y_number)
+            # initializing state
+            y = y_number
+            # checking
+            print("y value is:", y)
+
+
+        # further checking 
 	    print('You have chosen: x=' + str(x) +" y=" + str(y))
 	    rospy.set_param("des_pos_x", x)
 	    rospy.set_param("des_pos_y", y)
@@ -215,24 +250,24 @@ def main():
         #se lo stato viene cambiato (puo essere cambiato solo da dentro ui dopo aver inserito un input) il parametro e =1 
         #quindi  vado su in change_state() a settare il nuovo stato
         #NOTA: dentro change_state() risetto il parametro change_state=0
-        #se lo stato non è stato aggiornato  quindi change_state=0 controllo se il mio stato e 0 o 1 aspetto prima di pubblicare lo ui (come prima)
+        #se lo stato non e stato aggiornato  quindi change_state=0 controllo se il mio stato e 0 o 1 aspetto prima di pubblicare lo ui (come prima)
         
         
-	new_state=rospy.get_param('change_state')
-	if new_state == 1:
-	    change_state()
-		    
-	else:
-	    state_=rospy.get_param('state')
-		
-		if state_==1 or state_==2:
-		     a=target_distance()
-            if a<0.5 :
-		        msg_goalid=GoalID()
-		        pub_goalid.publish(msg_goalid)
-		        resp = srv_client_ui_()
+        new_state=rospy.get_param('change_state')
+        if new_state == 1:
+            change_state()
+                
+        else:
+            state_=rospy.get_param('state')
+            
+            if state_==1 or state_==2:
+                a=target_distance()
+                if a<0.5 :
+                    msg_goalid=GoalID()
+                    pub_goalid.publish(msg_goalid)
+                    resp = srv_client_ui_()
 
-        rate.sleep()
+    rate.sleep()
 
 
 if __name__ == "__main__":
