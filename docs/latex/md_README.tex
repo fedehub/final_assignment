@@ -1,0 +1,222 @@
+In this second assignment, we were asked to develop a software architecture for controlling a robot within a specific environment. More in details, our software will rely on two different packages\+:
+
+
+\begin{DoxyEnumerate}
+\item the move\+\_\+base pakage
+\item the gmapping package
+\end{DoxyEnumerate}
+
+The first one, will take care of the localization of our robot within the enviroment, whereas the second one will plan the motion.
+
+\subsection*{User request}
+
+The architecture will provide a way to get the {\bfseries user request}, and will make the robot capable of executing one of the following behaviors (depending on the user’s input)\+:
+
+
+\begin{DoxyEnumerate}
+\item Move randomly in the environment, by choosing 1 out of 6 possible target position \tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*2{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}{\bf Position }&{\bf Coordinates  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}{\bf Position }&{\bf Coordinates  }\\\cline{1-2}
+\endhead
+Position 1 &(-\/4,-\/3) \\\cline{1-2}
+Position 2 &(-\/4,2) \\\cline{1-2}
+Position 3 &(-\/4,7) \\\cline{1-2}
+Position 4 &(5,-\/7) \\\cline{1-2}
+Position 5 &(5,-\/3) \\\cline{1-2}
+Position 6 &(5,1) \\\cline{1-2}
+\end{longtabu}
+
+\item Directly ask the user for the {\bfseries next} target position (checking that the position is one of the possible six) and reach it)
+\item Start following the external walls
+\item Stop in the last position
+\item (optional) change the planning algorithm to {\itshape dijkstra} (move\+\_\+base) to the {\ttfamily bug0}
+\end{DoxyEnumerate}
+
+\section*{How the architecture is structured}
+
+Please, find in the following sections a brief summary of the various R\+OS messages, services, parameters, and other sub-\/structures used to realise this project
+
+\subsection*{Messages}
+
+\subsubsection*{Published messages}
+
+In the list below, the {\bfseries published messages} of the whole architecture are reported\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries actionlib\+\_\+msgs/\+Goal\+ID}\+: It publishes the messages to the $\ast$$\ast$/move\+\_\+base/cancel$\ast$$\ast$ topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid the inadvertent overlying of robot {\itshape distinct} behaviours
+\item {\bfseries geometry\+\_\+msgs/\+Twist}\+: It publishes the messages to the $\ast$$\ast$/cmd\+\_\+vel$\ast$$\ast$ topic. Moreover, it is used\+:
+\begin{DoxyEnumerate}
+\item for setting both the robot linear and and angular velocity
+\item for halting the robot.
+\end{DoxyEnumerate}
+\item {\bfseries move\+\_\+base\+\_\+msgs/\+Move\+Base\+Action\+Goal}\+: It publishes the messages to the $\ast$$\ast$/move\+\_\+base/goal$\ast$$\ast$ topic. Moreover, it is used for setting the move\+\_\+base goal that the robot has to achieve
+\end{DoxyItemize}
+
+\subsubsection*{Subscribed messages}
+
+In the list below, the {\bfseries subscribed messages} of the whole architecture are reported\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries geometry\+\_\+msgs/\+Point}\+: It defines the robot position, expressed as a {\bfseries Point}
+\item {\bfseries nav\+\_\+msgs/\+Odometry}\+: It provides the current robot position by means of the $\ast$$\ast$/\+Odom$\ast$$\ast$ topic
+\item {\bfseries sensor\+\_\+msgs/\+Laser\+Scanl} It provides the real-\/time laser output through the $\ast$$\ast$/scan$\ast$$\ast$ topic
+\end{DoxyItemize}
+
+\subsection*{Services}
+
+As far as services are concerned, I have here-\/reported a quick explanation of their purposes\+:
+
+
+\begin{DoxyEnumerate}
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/random_srv.py}{\tt random\+\_\+srv.\+py} script, there is the {\ttfamily /random\+\_\+srv} service. Its purpose is to choose between six different coordinate positions
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/go_to_point_service_m.py}{\tt go\+\_\+to\+\_\+point\+\_\+service\+\_\+m.\+py} script, there is the {\ttfamily /go\+\_\+to\+\_\+point\+\_\+switch} service. Its purpose is to {\itshape activate/deactivate} the {\bfseries go-\/to-\/point} behaviour
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/ui.py}{\tt ui.\+py} script, we find the {\ttfamily /ui} service. its purpose consists in providing a tool for selecting one out of the {\bfseries five} possible robot states. In the table below, it is possible to spot what, the different states implement\+:
+\end{DoxyEnumerate}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*2{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}{\bf \+\_\+state\+\_\+ }&{\bf {\itshape Coordinates}  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}{\bf \+\_\+state\+\_\+ }&{\bf {\itshape Coordinates}  }\\\cline{1-2}
+\endhead
+$\ast$$\ast$state 1$\ast$$\ast$ &move randomly \\\cline{1-2}
+$\ast$$\ast$state 2$\ast$$\ast$ &target position \\\cline{1-2}
+$\ast$$\ast$state 3$\ast$$\ast$ &walls following \\\cline{1-2}
+$\ast$$\ast$state 4$\ast$$\ast$ &stop \\\cline{1-2}
+$\ast$$\ast$state 5$\ast$$\ast$ &bug algorithm \\\cline{1-2}
+\end{longtabu}
+\begin{quote}
+{\itshape R\+E\+M\+A\+RK\+:} If {\ttfamily state 5} is chosen, I have implemented a sort of {\itshape timer} which allows the user to pick up another new target by means of a user-\/interface if an inserted target is not reachable. Once the target position has been reached or once the settled timer\textquotesingle{}s time (20 secs, in my implementation) has expired, the program exits the bug state \end{quote}
+
+
+
+\begin{DoxyEnumerate}
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/user_interface.py}{\tt user\+\_\+interface.\+py} script, we find the {\ttfamily /user\+\_\+interface service}. Its purpose basically consists in providing a tool for selecting the {\itshape x,y coordinates} of the next desired robot target position, once the previous target has been reached. Moreover, this is the {\itshape user-\/interface} exploited by the {\bfseries bug algorithm}
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_service_m.py}{\tt wall\+\_\+follower\+\_\+service\+\_\+m.\+py} script, we find the {\ttfamily /wall\+\_\+follower\+\_\+switch} service. Its purpose is to {\itshape activate/deactivate} the {\bfseries wall-\/follower} behaviour
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_bug.py}{\tt wall\+\_\+follower\+\_\+bug.\+py} script, we find the {\ttfamily /wall\+\_\+follower\+\_\+bug} service. Its purpose is to {\itshape activate/deactivate} the {\bfseries wall-\/follower} behaviour. \begin{quote}
+{\itshape R\+E\+M\+A\+RK\+:} This is the service exploited by the {\ttfamily bug algorithm}! \end{quote}
+
+\item Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts/bug_m.py}{\tt bug\+\_\+m.\+py} script, we find the {\ttfamily /bug\+\_\+alg} service. Its purpose is to {\itshape activate/deactivate} the {\bfseries bug algorithm} behaviour (through a boolean value)
+\end{DoxyEnumerate}
+
+\subsection*{Nodes}
+
+Within the \href{https://github.com/fedehub/final_assignment/tree/main/scripts}{\tt scripts} folder, the following nodes are available\+:
+
+
+\begin{DoxyEnumerate}
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/master_node.py}{\tt master\+\_\+node.\+py} It implements the structure of the entire architecture. It handles the simulation structure and it provides a way for checking the robot state. Then, it triggers the required service.
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/user_interface.py}{\tt user\+\_\+interface.\+py} As its name suggests, It provides a service, exploited by the {\bfseries bug algorithm},for letting the user choose which {\bfseries target position} the robot should achieve.
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/ui.py}{\tt ui.\+py} It provides a user-\/interface in which the user has to select 1 out of 5 available states. Then, once inserted the chosen state, a \char`\"{}valid state\char`\"{} {\bfseries message} appears, so that the user can save his/her choice by typing the string \char`\"{}done\char`\"{} \begin{quote}
+{\itshape R\+E\+M\+A\+RK\+:} When entering the \char`\"{}done\char`\"{} string or other strings, remember to add the quote marks \char`\"{}\char`\"{} \end{quote}
+
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_bug.py}{\tt wall\+\_\+follower\+\_\+bug.\+py} It provides a service for avoiding the collision between our robot and the neighboring walls while performing the target achievement \begin{quote}
+{\itshape R\+E\+M\+A\+RK\+:} We need to distinguish between {\itshape \hyperlink{wall__follower__bug_8py}{wall\+\_\+follower\+\_\+bug.\+py}} and {\itshape \hyperlink{wall__follower__service__m_8py}{wall\+\_\+follower\+\_\+service\+\_\+m.\+py}} because even if they share the same code structure, when calling the latter service, both \textquotesingle{}bug algorithm\textquotesingle{} and its {\itshape \hyperlink{namespacewall__follower__service__m}{wall\+\_\+follower\+\_\+service\+\_\+m}} are disabled! \end{quote}
+
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_service_m.py}{\tt wall\+\_\+follower\+\_\+service\+\_\+m.\+py} As its name suggests, it provides a service for simulating the wall following behaviour
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/go_to_point_service_m.py}{\tt go\+\_\+to\+\_\+point\+\_\+service\+\_\+m.\+py} It provides a service for making the {\bfseries bug algorithm$\ast$$\ast$$\ast$ capable of implementing the $\ast$$\ast$go-\/to-\/point} behaviour
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/random_srv.py}{\tt random\+\_\+srv.\+py} It provides a straightforward service, for setting a {\bfseries random position} which the robot will achieve
+\item \href{https://github.com/fedehub/final_assignment/tree/main/scripts/bug_m.py}{\tt bug\+\_\+m.\+py} It provides a service for carrying out the {\bfseries bug algorithm} behaviour
+\end{DoxyEnumerate}
+
+\subsection*{Parameters}
+
+They are contained in the \href{https://github.com/fedehub/final_assignment/tree/main/launch}{\tt launch} folder. More specifically\+:
+
+
+\begin{DoxyItemize}
+\item Within the \href{https://github.com/fedehub/final_assignment/blob/main/launch/node_master.launch}{\tt node\+\_\+master.\+launch} file, I have initialised\+:
+\begin{DoxyItemize}
+\item {\ttfamily des\+\_\+pos\+\_\+x} and {\ttfamily des\+\_\+pos\+\_\+y} for allocating the {\itshape x,y coordinates} of the target the user has chosen (so that the robot can reach them)
+\item {\ttfamily state} for individuating the current state (between {\itshape 1 and 5}) of the robot
+\item {\ttfamily change\+\_\+state} for initialising at {\itshape zero} the current state of our robot. It has been proven very useful during the implementation of the {\bfseries bug algorithm}
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\section*{How to launch}
+
+
+\begin{DoxyEnumerate}
+\item Firstly, create a folder named \+\_\+\char`\"{}final\+\_\+assignment\char`\"{}\+\_\+
+\item Within the aforementioned folder, open the terminal and run\+:
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+1 git clone https://github.com/fedehub/final\_assignment/
+\end{DoxyCode}
+
+\begin{DoxyEnumerate}
+\item Then, to launch the {\itshape 3D visualizer Rviz} and the {\itshape 3D simulator Gazebo} please run the command 
+\begin{DoxyCode}
+1 roslaunch final\_assignment simulation\_gmapping.launch
+\end{DoxyCode}
+
+\item To launch the {\itshape move\+\_\+base.\+launch}, digit\+:
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+1 roslaunch final\_assignment move\_base.launch
+\end{DoxyCode}
+
+\begin{DoxyEnumerate}
+\item To conclude with, digit\+:
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+1 roslaunch final\_assignment.launch
+\end{DoxyCode}
+
+
+\subsection*{Documentation}
+
+The documentation of this project, obtained by means of {\bfseries Doxy\+Gen} is visible, within the \href{https://github.com/fedehub/final_assignment/tree/main/docs}{\tt docs} folder
+
+\subsection*{System limitation\textquotesingle{}s and possible Improvements}
+
+\subsection*{Release History}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily 0.\+1.\+0}
+\begin{DoxyItemize}
+\item The first proper release
+\end{DoxyItemize}
+\item {\ttfamily 0.\+0.\+1}
+\begin{DoxyItemize}
+\item Work in progress
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsection*{Meta}
+
+Federico Civetta– s4194543 – \href{mailto:fedeunivers@gmail.com}{\tt fedeunivers@gmail.\+com}
+
+Distributed under none licence
+
+\href{https://github.com/fedehub}{\tt https\+://github.\+com/fedehub}
+
+\subsection*{Contributing}
+
+
+\begin{DoxyEnumerate}
+\item Fork it (\href{https://github.com/fedehub/final_assignment/fork}{\tt https\+://github.\+com/fedehub/final\+\_\+assignment/fork})
+\item Create your feature branch ({\ttfamily git checkout -\/b feature/foo\+Bar})
+\item Commit your changes ({\ttfamily git commit -\/am \textquotesingle{}Add some foo\+Bar\textquotesingle{}})
+\item Push to the branch ({\ttfamily git push origin feature/foo\+Bar})
+\item Create a new Pull Request 
+\end{DoxyEnumerate}
