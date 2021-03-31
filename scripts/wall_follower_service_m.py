@@ -1,5 +1,13 @@
 #! /usr/bin/env python
 
+## @package wall_follower_service_m
+#  Documentation for the master_node module.
+#
+#  More details.
+#
+# As its name suggests, it provides a service for simulating the wall following
+# behaviour
+
 import rospy
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
@@ -9,6 +17,7 @@ from std_srvs.srv import *
 
 import math
 
+# boolean global variable
 active_ = False
 
 pub_ = None
@@ -26,6 +35,14 @@ state_dict_ = {
     2: 'follow the wall',
 }
 
+## Documentation for the wall_follower_switch function.
+#
+#  More details.
+#
+# @param req the object pointer
+# @var active_ activate/deactivate_the service
+# @var res returns a boolean as the response of the service
+#
 
 def wall_follower_switch(req):
     global active_
@@ -35,7 +52,13 @@ def wall_follower_switch(req):
     res.message = 'Done!'
     return res
 
-
+## Documentation for the clbk_laser function.
+#
+#  More details.
+#
+# @param msg the object pointer of type LaserScan
+# @var regions_ specifies how far the walls are from the laser sources
+#
 def clbk_laser(msg):
     global regions_
     regions_ = {

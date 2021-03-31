@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 
+## @package bug_m
+#  Documentation for the bug_m.py module.
+#
+#  More details.
+#
+# It provides a service for carrying out the **bug algorithm** behaviour.
+# This module represents the master of the bug algorithm structure. Indeed it
+# communicates with the otehr nodes.
+
 import rospy
 import time # for using sleep() function
 # import ros message
@@ -13,6 +22,7 @@ from geometry_msgs.msg import Twist
 
 import math
 
+# initialisation of global variables 
 pub = None
 srv_client_ui_=None
 srv_client_go_to_point_ = None
@@ -27,6 +37,7 @@ desired_position_.x = rospy.get_param('des_pos_x')
 desired_position_.y = rospy.get_param('des_pos_y')
 desired_position_.z = 0
 regions_ = None
+# available states
 state_desc_ = ['Go to point', 'wall following', 'target reached']
 state_ = 0
 first=True
@@ -36,6 +47,14 @@ clock_start=0
 
 # callbacks
 active_=False
+
+## Documentation for the clbk_odom function.
+#
+#  More details.
+#
+# @param msg the object pointer of type Odometry
+# @var position_ memorise the actual robot position
+# @var yaw_ memorise the robot orientation
 
 def clbk_odom(msg):
     global position_, yaw_
@@ -52,7 +71,13 @@ def clbk_odom(msg):
     euler = transformations.euler_from_quaternion(quaternion)
     yaw_ = euler[2]
 
-
+## Documentation for the clbk_laser function.
+#
+#  More details.
+#
+# @param msg the object pointer of type LaserScan
+# @var regions_ specifies how far the walls are from the laser sources
+#
 def clbk_laser(msg):
     global regions_
     regions_ = {
@@ -63,6 +88,14 @@ def clbk_laser(msg):
         'left':   min(min(msg.ranges[576:719]), 10),
     }
 
+## Documentation for the active_bug function.
+#
+#  More details.
+#
+# @param req the object pointer
+# @var active_ activate/deactivate_the service
+# @var res returns a boolean as the response of the service
+#
 def active_bug(req):
     global active_
     active_ = req.data
@@ -72,6 +105,14 @@ def active_bug(req):
     res.success = True
     res.message = 'Done!'
     return res
+
+## Documentation for the change_state function.
+#
+#  More details.
+#
+# @param state the object pointer
+# @var state_ the actual robot state
+#
 
 def change_state(state):
     global state_, state_desc_
@@ -89,12 +130,13 @@ def change_state(state):
     if state_ == 2:
         resp = srv_client_go_to_point_(False)
         resp = srv_client_wall_follower_(False)
+        # publish message to stop the robot
         twist_msg = Twist()
         twist_msg.linear.x = 0
         twist_msg.angular.z = 0
         pub.publish(twist_msg)
         clock_start=time.clock()
-        #print(clock_start)
+
 
 
 def normalize_angle(angle):
@@ -105,24 +147,31 @@ def normalize_angle(angle):
 
 def main():
     time.sleep(2)
+    # initiialisation of global variables
     global regions_, position_, desired_position_, state_, yaw_, yaw_error_allowed_
     global srv_client_go_to_point_, srv_client_wall_follower_, srv_client_user_interface_, pub,srv_client_ui_
     global active_,first,clock_start
+    # initialisation of the bug0 node
     rospy.init_node('bug0')
 
+    # initialising Subscriber for /scan topic. As argument it takes clbk_laser Callback
     sub_laser = rospy.Subscriber('/scan', LaserScan, clbk_laser)
+    # initialising Subscriber for /scan topic . As argument it takes clbk_odom Callback
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
+    # initialising Pubscriber for /cmd_vel topic .
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
+    # initialising services as service client
     srv_client_go_to_point_ = rospy.ServiceProxy(
         '/go_to_point_switch', SetBool)
     srv_client_wall_follower_ = rospy.ServiceProxy(
         '/wall_follower_bug', SetBool)
     srv_client_user_interface_ = rospy.ServiceProxy('/user_interface', Empty)
+    # initialisng the bug algorithm service as a service server
     srv = rospy.Service('bug_alg', SetBool, active_bug)
     srv_client_ui_ = rospy.ServiceProxy('/ui', Empty)
 
-    # initialize going to the point
+    # initialised to "stop" state
     change_state(2)
 
     rate = rospy.Rate(20)
@@ -134,23 +183,22 @@ def main():
         clock_time = time.clock()
         # initializing expired_time
         expired_time = clock_time - clock_start
-        # if time_elapsed is over 1 minute,
-        #print(expired_time)
+        # if expired_time is over 20 seconds,
         if expired_time > 20:
             first = True
             active_ = False
             # blocking the robot
             change_state(2)
             print ('Unfortunatelly the target is not reachable! If you want to exploit the bug algorithm, please insert: 5')
-            #rospy.set_param('bool_check',1)
-            # calling our ui
+            # calling our user interface
             resp=srv_client_ui_()
 
-        # going on
+        # going on if time is not expired
         else:
+            # if there are not walls in the neighborhood
             if regions_ == None:
                 continue
-
+            # if the go to point behavior is set to True
             if state_ == 0:
                 err_pos = math.sqrt(pow(desired_position_.y - position_.y,
                                         2) + pow(desired_position_.x - position_.x, 2))
@@ -160,6 +208,7 @@ def main():
                 elif regions_['front'] < 0.5:
                     change_state(1)
 
+            # if the wall follower behavior is set to True
             elif state_ == 1:
                 desired_yaw = math.atan2(
                     desired_position_.y - position_.y, desired_position_.x - position_.x)
@@ -172,23 +221,23 @@ def main():
                 if regions_['front'] > 1 and math.fabs(err_yaw) < 0.05:
                     change_state(0)
 
+            # if the robot is stopped
             elif state_ == 2:
                 if first==False:
-		        #rospy.set_param('bool_check',1)
-		        print('target has been reached! If you want to exploit the bug algorithm, please insert: 5')
-		        resp=srv_client_ui_()
+		           print('target has been reached! If you want to exploit the bug algorithm, please insert: 5')
+		           resp=srv_client_ui_()
 
                 # if first = true (if it is the first time, i call the user_interface)
                 resp = srv_client_user_interface_()
                 # starting the clock
                 clock_start = time.clock()
-                #print(clock_start)
                 time.sleep(2)
 
                 # the second time i got in the loop, first will be initialize as false
                 # and i will go back to the if loop above
                 first=False
 
+                # getting the goal position of x and y coordinates
                 desired_position_.x = rospy.get_param('des_pos_x')
                 desired_position_.y = rospy.get_param('des_pos_y')
                 err_pos = math.sqrt(pow(desired_position_.y - position_.y,

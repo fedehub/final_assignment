@@ -37,23 +37,23 @@ Please, find in the following sections a brief summary of the various ROS messag
 
 In the list below, the **published messages** of the whole architecture are reported:
 
-* **actionlib_msgs/GoalID**: It publishes the messages to the **/move_base/cancel** topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid  the inadvertent overlying of robot _distinct_ behaviours
+* `actionlib_msgs/GoalID`: It publishes the messages to the **/move_base/cancel** topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid  the inadvertent overlying of robot _distinct_ behaviours
 
-* **geometry_msgs/Twist**: It publishes the messages to the **/cmd_vel** topic. Moreover, it is used:
+* `geometry_msgs/Twist`: It publishes the messages to the **/cmd_vel** topic. Moreover, it is used:
   1. for setting both the robot linear and and angular velocity
   2. for halting the robot.
 
-* **move_base_msgs/MoveBaseActionGoal**: It publishes the messages to the **/move_base/goal** topic. Moreover, it is used for setting the move_base goal that the robot has to achieve
+* `move_base_msgs/MoveBaseActionGoal`: It publishes the messages to the **/move_base/goal** topic. Moreover, it is used for setting the move_base goal that the robot has to achieve
 
 ### Subscribed messages
 
 In the list below, the **subscribed messages** of the whole architecture are reported:
 
-* **geometry_msgs/Point**: It defines the robot position, expressed as a **Point**
+* `geometry_msgs/Point`: It defines the robot position, expressed as a **Point**
 
-* **nav_msgs/Odometry**: It provides the current robot position by means of the **/Odom** topic
+* `nav_msgs/Odometry`: It provides the current robot position by means of the **/Odom** topic
 
-* **sensor_msgs/LaserScanl** It provides the real-time laser output through the **/scan** topic
+* `sensor_msgs/LaserScanl` It provides the real-time laser output through the **/scan** topic
 
 ## Services
 
@@ -73,7 +73,7 @@ _state_ | _Coordinates_
 **state 4** | stop
 **state 5** | bug algorithm
 
-> _REMARK:_ If `state 5` is chosen, I have implemented a sort of _timer_ which allows the user to pick up another new target by means of a user-interface if an inserted target is not reachable. Once the target position has been reached or once the settled timer's time (20 secs, in my implementation) has expired, the program exits the bug state
+> _REMARK:_ When `state 5` is chosen, I have implemented a _20 secs timer_ which allows the user to exit from _bug algorithm_ if the target is not yet reached (then it is assumed to be not reachable). Once the time has expired, the user has the possibility to re-enter in **state 5**  and pick up another new target by means of a user-interface.
 
 4. Within the [user_interface.py](https://github.com/fedehub/final_assignment/tree/main/scripts/user_interface.py) script, we find the `/user_interface service`. Its purpose basically consists in providing a tool for selecting the _x,y coordinates_ of the next desired robot target position, once the previous target has been reached. Moreover, this is the _user-interface_ exploited by the **bug algorithm**
 

@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 
+## @package go_to_point_service_m
+#  Documentation for the go_to_poit_service module.
+#
+#  More details.
+#
+# It provides a service for making the bug algorithm* capable of
+# implementing
+# the go-to-point behaviour
+
 # import ros stuff
 import rospy
 from sensor_msgs.msg import LaserScan
@@ -19,6 +28,7 @@ yaw_ = 0
 state_ = 0
 # goal
 desired_position_ = Point()
+# putting the parameter retreived from the launch file in the x and y desired position
 desired_position_.x = rospy.get_param('des_pos_x')
 desired_position_.y = rospy.get_param('des_pos_y')
 desired_position_.z = 0
@@ -38,7 +48,14 @@ pub = None
 
 # service callbacks
 
-
+## Documentation for the go_to_point_switch
+#
+#  More details.
+#
+# @param req the object pointer
+# @var active_ activate/deactivate_the service
+# @var res returns a boolean as the response of the service
+#
 def go_to_point_switch(req):
     global active_
     active_ = req.data
@@ -47,8 +64,14 @@ def go_to_point_switch(req):
     res.message = 'Done!'
     return res
 
-# callbacks
 
+## Documentation for the clbk_odom function.
+#
+#  More details.
+#
+# @param msg the object pointer of type Odometry
+# @var position_ memorise the actual robot position
+# @var yaw_ memorise the robot orientation
 
 def clbk_odom(msg):
     global position_
@@ -65,6 +88,13 @@ def clbk_odom(msg):
         msg.pose.pose.orientation.w)
     euler = transformations.euler_from_quaternion(quaternion)
     yaw_ = euler[2]
+
+## Documentation for the change_state function.
+#
+#  More details.
+#
+# @param
+# @var state_ the current state of the robot
 
 
 def change_state(state):
@@ -140,18 +170,20 @@ def done(des_pos):
 
 def main():
     global pub, active_, desired_position_
-
+    # initialising the node
     rospy.init_node('go_to_point')
-
+    # initialising the Publisher
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-
+    # initialising the Subscriber. As arguments it takes the clbk_odom
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
-
+    # intialising the service for server. As argument it takes the go_to_point_switch callback
     srv = rospy.Service('go_to_point_switch', SetBool, go_to_point_switch)
 
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
+        # getting the x coordinate from the launch file
         desired_position_.x = rospy.get_param('des_pos_x')
+        # getting the y coordinate from the launch file
         desired_position_.y = rospy.get_param('des_pos_y')
         if not active_:
             continue

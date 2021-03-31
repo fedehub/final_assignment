@@ -1,41 +1,37 @@
 #! /usr/bin/env python
 
+## @package ui
+#  Documentation for the ui.py module.
+#
+#  More details.
+#
+# It provides a service for letting the user communicate by means of
+# an ad-hoc interface
+
 # import ros stuff
 import rospy
 from std_srvs.srv import *
 
-"""
-# Cheking the user input 
-def check_user_input(input):
-    try:
-        # Convert it into integer
-        temp_val = int(input)
-        if temp_val in range(1,5):
-            print("Input is a valid integer number.\n Saving state:", temp_val)
-            state = temp_val
-        else :
-            print("Input is not belonging to the range 1, 5")
-    except ValueError:
-        try:
-            # Convert it into float
-            temp_val = float(input)
-            print("Input is a float  number. Please, enter an integer one")
-        except ValueError:
-            print("Input is a string instead of a number. \n I am exiting the program!")"""
 
-def check_for_input(input1, exit = True):
-    """
-    Checks if the type of "input1" is a float and returns the value if so.
-    Input:    input1 -- variable to check
-    Output: val -- value of float
-    """
+## Documentation for the check_for_input function.
+#
+#  More details.
+#
+# @param input1 the object pointer
+# @var exit boolean variable for entering again the loop
+# @var states_available available states
+# @var value input variable to check
+
+def check_for_input(input1):
+
+    exit = True
     try:
         state=0
         states_available = [1,2,3,4,5]
         value = float(input1)
-        # Only allows input floats   
+        # Only allows input floats
         if value in states_available:
-            return value 
+            return value
         else:
             print("Please, enter a state between those available")
             return False
@@ -45,7 +41,14 @@ def check_for_input(input1, exit = True):
             quit()
         return False
 
-# service callback
+## Documentation for the set_new_pos function.
+#
+#  More details.
+#
+# @param req the object pointer
+# @var count variable for debugging-issues
+# @var input_number variable which memorize the user input
+# @var number variable where I save the checked user's input
 def set_new_pos(req):
     print("Please insert the desired robot state: \n")
     print("Available states: \n")
@@ -56,29 +59,25 @@ def set_new_pos(req):
     print("Fifth state: (state 5) - bug algorithm \n")
 
     # Initializing variable
-    count = 0                                 
+    count = 0
     # Stays in loop until break
-    while True:                               
+    while True:
         input_number = input('Please, follow these instructions.\n 1. Enter a valid state.\n 2. Press enter. \n Once "valid state!" message appears, digit "done"\n')
         if input_number == 'done':
-            # exit the while loop 
-            break                             
+            # exit the while loop
+            break
 
-        number = check_for_input(input_number, False)
+        number = check_for_input(input_number)
         if not number:
             continue
 
-        # counter for debugging puroses     
-        count += 1                            
+        # counter for debugging puroses
+        count += 1
         print("valid state:", number)
 		# initializing state
-        state = number 
-        	  
-   """ # check between 1 and 4 after 20 line 
-    state = input("Enter a state by specifying an integer between 1 and 5:\n")
-    # ensuring right entrance by the user 
-    check_user_input(state) """
-     
+        state = number
+
+    # setting the parameter
     rospy.set_param("state", state)
     #the state has been changed
     rospy.set_param('change_state',1)
@@ -87,8 +86,9 @@ def set_new_pos(req):
 
 
 def main():
+    # initialisng the node
     rospy.init_node('ui')
-
+    # initialing the service server. As argument it takes the set_new_pos Callback
     srv = rospy.Service('ui', Empty, set_new_pos)
 
     rate = rospy.Rate(20)
