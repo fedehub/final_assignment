@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>Research Track - second assignment: Research Track I - second assignment</title>
+<title>Research track module I - second assignment: Research Track I - second assignment</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -23,7 +23,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Research Track - second assignment
+   <div id="projectname">Research track module I - second assignment
+   &#160;<span id="projectnumber">0.1.0</span>
    </div>
   </td>
  </tr>
@@ -39,7 +40,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li class="current"><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -116,20 +117,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h3>Published messages</h3>
 <p>In the list below, the <b>published messages</b> of the whole architecture are reported:</p>
 <ul>
-<li><b>actionlib_msgs/GoalID</b>: It publishes the messages to the **/move_base/cancel** topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid the inadvertent overlying of robot <em>distinct</em> behaviours</li>
-<li><b>geometry_msgs/Twist</b>: It publishes the messages to the **/cmd_vel** topic. Moreover, it is used:<ol type="1">
+<li><code>actionlib_msgs/GoalID</code>: It publishes the messages to the **/move_base/cancel** topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid the inadvertent overlying of robot <em>distinct</em> behaviours</li>
+<li><code>geometry_msgs/Twist</code>: It publishes the messages to the **/cmd_vel** topic. Moreover, it is used:<ol type="1">
 <li>for setting both the robot linear and and angular velocity</li>
 <li>for halting the robot.</li>
 </ol>
 </li>
-<li><b>move_base_msgs/MoveBaseActionGoal</b>: It publishes the messages to the **/move_base/goal** topic. Moreover, it is used for setting the move_base goal that the robot has to achieve</li>
+<li><code>move_base_msgs/MoveBaseActionGoal</code>: It publishes the messages to the **/move_base/goal** topic. Moreover, it is used for setting the move_base goal that the robot has to achieve</li>
 </ul>
 <h3>Subscribed messages</h3>
 <p>In the list below, the <b>subscribed messages</b> of the whole architecture are reported:</p>
 <ul>
-<li><b>geometry_msgs/Point</b>: It defines the robot position, expressed as a <b>Point</b></li>
-<li><b>nav_msgs/Odometry</b>: It provides the current robot position by means of the **/Odom** topic</li>
-<li><b>sensor_msgs/LaserScanl</b> It provides the real-time laser output through the **/scan** topic</li>
+<li><code>geometry_msgs/Point</code>: It defines the robot position, expressed as a <b>Point</b></li>
+<li><code>nav_msgs/Odometry</code>: It provides the current robot position by means of the **/Odom** topic</li>
+<li><code>sensor_msgs/LaserScanl</code> It provides the real-time laser output through the **/scan** topic</li>
 </ul>
 <h2>Services</h2>
 <p>As far as services are concerned, I have here-reported a quick explanation of their purposes:</p>
@@ -153,7 +154,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <td>**state 5** </td><td>bug algorithm </td></tr>
 </table>
 <blockquote class="doxtable">
-<p><em>REMARK:</em> If <code>state 5</code> is chosen, I have implemented a sort of <em>timer</em> which allows the user to pick up another new target by means of a user-interface if an inserted target is not reachable. Once the target position has been reached or once the settled timer's time (20 secs, in my implementation) has expired, the program exits the bug state </p>
+<p><em>REMARK:</em> When <code>state 5</code> is chosen, I have implemented a <em>20 secs timer</em> which allows the user to exit from <em>bug algorithm</em> if the target is not yet reached (then it is assumed to be not reachable). Once the time has expired, the user has the possibility to re-enter in <b>state 5</b> and pick up another new target by means of a user-interface. </p>
 </blockquote>
 <ol type="1">
 <li>Within the <a href="https://github.com/fedehub/final_assignment/tree/main/scripts/user_interface.py">user_interface.py</a> script, we find the <code>/user_interface service</code>. Its purpose basically consists in providing a tool for selecting the <em>x,y coordinates</em> of the next desired robot target position, once the previous target has been reached. Moreover, this is the <em>user-interface</em> exploited by the <b>bug algorithm</b></li>
@@ -174,7 +175,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </blockquote>
 </li>
 <li><a href="https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_bug.py">wall_follower_bug.py</a> It provides a service for avoiding the collision between our robot and the neighboring walls while performing the target achievement <blockquote class="doxtable">
-<p><em>REMARK:</em> We need to distinguish between <em><a class="el" href="wall__follower__bug_8py.html">wall_follower_bug.py</a></em> and <em><a class="el" href="wall__follower__service__m_8py.html">wall_follower_service_m.py</a></em> because even if they share the same code structure, when calling the latter service, both 'bug algorithm' and its <em><a class="el" href="namespacewall__follower__service__m.html">wall_follower_service_m</a></em> are disabled! </p>
+<p><em>REMARK:</em> We need to distinguish between <em><a class="el" href="wall__follower__bug_8py.html">wall_follower_bug.py</a></em> and <em><a class="el" href="wall__follower__service__m_8py.html">wall_follower_service_m.py</a></em> because even if they share the same code structure, when calling the latter service, both 'bug algorithm' and its <em><a class="el" href="namespacewall__follower__service__m.html" title="Documentation for the wall_follower_service_m.py module. ">wall_follower_service_m</a></em> are disabled! </p>
 </blockquote>
 </li>
 <li><a href="https://github.com/fedehub/final_assignment/tree/main/scripts/wall_follower_service_m.py">wall_follower_service_m.py</a> As its name suggests, it provides a service for simulating the wall following behaviour</li>
@@ -192,6 +193,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ul>
 </li>
 </ul>
+<h2>Rqt-graph (ROS tool)</h2>
+<p>By running the following command:</p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;rosrun rqt_graph rqt_graph</div></div><!-- fragment --><p> it is possible to show a dynamic graph, depicting what is going on within the System.</p>
+<div class="image">
+<img src="https://github.com/fedehub/final_assignment/blob/main/rqt_graph/rosgraph2.png"  alt="rqt_graph" title="Rqt_graph second assignment"/>
+</div>
 <h1>How to launch</h1>
 <ol type="1">
 <li>Firstly, create a folder named _"final_assignment"_</li>
@@ -204,9 +211,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;roslaunch final_assignment move_base.launch</div></div><!-- fragment --><ol type="1">
 <li>To conclude with, digit:</li>
 </ol>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;roslaunch final_assignment.launch</div></div><!-- fragment --><h2>Documentation</h2>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;roslaunch final_assignment node_master.launch</div></div><!-- fragment --><h2>Documentation</h2>
 <p>The documentation of this project, obtained by means of <b>DoxyGen</b> is visible, within the <a href="https://github.com/fedehub/final_assignment/tree/main/docs">docs</a> folder</p>
 <h2>System limitation's and possible Improvements</h2>
+<p>The <code>state 1</code> behaviour can be implemented so that the move_base should be capable of publishing continuously random position without blocking.</p>
 <h2>Release History</h2>
 <ul>
 <li><code>0.1.0</code><ul>

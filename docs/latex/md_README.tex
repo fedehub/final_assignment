@@ -50,13 +50,13 @@ In the list below, the {\bfseries published messages} of the whole architecture 
 
 
 \begin{DoxyItemize}
-\item {\bfseries actionlib\+\_\+msgs/\+Goal\+ID}\+: It publishes the messages to the $\ast$$\ast$/move\+\_\+base/cancel$\ast$$\ast$ topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid the inadvertent overlying of robot {\itshape distinct} behaviours
-\item {\bfseries geometry\+\_\+msgs/\+Twist}\+: It publishes the messages to the $\ast$$\ast$/cmd\+\_\+vel$\ast$$\ast$ topic. Moreover, it is used\+:
+\item {\ttfamily actionlib\+\_\+msgs/\+Goal\+ID}\+: It publishes the messages to the $\ast$$\ast$/move\+\_\+base/cancel$\ast$$\ast$ topic in order to remove a target as it is considered reached. Indeed, it allows to easily avoid the inadvertent overlying of robot {\itshape distinct} behaviours
+\item {\ttfamily geometry\+\_\+msgs/\+Twist}\+: It publishes the messages to the $\ast$$\ast$/cmd\+\_\+vel$\ast$$\ast$ topic. Moreover, it is used\+:
 \begin{DoxyEnumerate}
 \item for setting both the robot linear and and angular velocity
 \item for halting the robot.
 \end{DoxyEnumerate}
-\item {\bfseries move\+\_\+base\+\_\+msgs/\+Move\+Base\+Action\+Goal}\+: It publishes the messages to the $\ast$$\ast$/move\+\_\+base/goal$\ast$$\ast$ topic. Moreover, it is used for setting the move\+\_\+base goal that the robot has to achieve
+\item {\ttfamily move\+\_\+base\+\_\+msgs/\+Move\+Base\+Action\+Goal}\+: It publishes the messages to the $\ast$$\ast$/move\+\_\+base/goal$\ast$$\ast$ topic. Moreover, it is used for setting the move\+\_\+base goal that the robot has to achieve
 \end{DoxyItemize}
 
 \subsubsection*{Subscribed messages}
@@ -65,9 +65,9 @@ In the list below, the {\bfseries subscribed messages} of the whole architecture
 
 
 \begin{DoxyItemize}
-\item {\bfseries geometry\+\_\+msgs/\+Point}\+: It defines the robot position, expressed as a {\bfseries Point}
-\item {\bfseries nav\+\_\+msgs/\+Odometry}\+: It provides the current robot position by means of the $\ast$$\ast$/\+Odom$\ast$$\ast$ topic
-\item {\bfseries sensor\+\_\+msgs/\+Laser\+Scanl} It provides the real-\/time laser output through the $\ast$$\ast$/scan$\ast$$\ast$ topic
+\item {\ttfamily geometry\+\_\+msgs/\+Point}\+: It defines the robot position, expressed as a {\bfseries Point}
+\item {\ttfamily nav\+\_\+msgs/\+Odometry}\+: It provides the current robot position by means of the $\ast$$\ast$/\+Odom$\ast$$\ast$ topic
+\item {\ttfamily sensor\+\_\+msgs/\+Laser\+Scanl} It provides the real-\/time laser output through the $\ast$$\ast$/scan$\ast$$\ast$ topic
 \end{DoxyItemize}
 
 \subsection*{Services}
@@ -98,7 +98,7 @@ $\ast$$\ast$state 4$\ast$$\ast$ &stop \\\cline{1-2}
 $\ast$$\ast$state 5$\ast$$\ast$ &bug algorithm \\\cline{1-2}
 \end{longtabu}
 \begin{quote}
-{\itshape R\+E\+M\+A\+RK\+:} If {\ttfamily state 5} is chosen, I have implemented a sort of {\itshape timer} which allows the user to pick up another new target by means of a user-\/interface if an inserted target is not reachable. Once the target position has been reached or once the settled timer\textquotesingle{}s time (20 secs, in my implementation) has expired, the program exits the bug state \end{quote}
+{\itshape R\+E\+M\+A\+RK\+:} When {\ttfamily state 5} is chosen, I have implemented a {\itshape 20 secs timer} which allows the user to exit from {\itshape bug algorithm} if the target is not yet reached (then it is assumed to be not reachable). Once the time has expired, the user has the possibility to re-\/enter in {\bfseries state 5} and pick up another new target by means of a user-\/interface. \end{quote}
 
 
 
@@ -145,6 +145,18 @@ They are contained in the \href{https://github.com/fedehub/final_assignment/tree
 \end{DoxyItemize}
 \end{DoxyItemize}
 
+\subsection*{Rqt-\/graph (R\+OS tool)}
+
+By running the following command\+:
+
+
+\begin{DoxyCode}
+1 rosrun rqt\_graph rqt\_graph
+\end{DoxyCode}
+ it is possible to show a dynamic graph, depicting what is going on within the System.
+
+
+
 \section*{How to launch}
 
 
@@ -178,7 +190,7 @@ They are contained in the \href{https://github.com/fedehub/final_assignment/tree
 
 
 \begin{DoxyCode}
-1 roslaunch final\_assignment.launch
+1 roslaunch final\_assignment node\_master.launch
 \end{DoxyCode}
 
 
@@ -187,6 +199,8 @@ They are contained in the \href{https://github.com/fedehub/final_assignment/tree
 The documentation of this project, obtained by means of {\bfseries Doxy\+Gen} is visible, within the \href{https://github.com/fedehub/final_assignment/tree/main/docs}{\tt docs} folder
 
 \subsection*{System limitation\textquotesingle{}s and possible Improvements}
+
+The {\ttfamily state 1} behaviour can be implemented so that the move\+\_\+base should be capable of publishing continuously random position without blocking.
 
 \subsection*{Release History}
 

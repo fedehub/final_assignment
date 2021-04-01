@@ -1,5 +1,10 @@
 \hypertarget{namespacemaster__node}{}\section{master\+\_\+node Namespace Reference}
 \label{namespacemaster__node}\index{master\+\_\+node@{master\+\_\+node}}
+
+
+Documentation for the \hyperlink{namespacemaster__node}{master\+\_\+node} module.  
+
+
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -9,14 +14,14 @@ def \hyperlink{namespacemaster__node_a3488ca68ed6c44dc10a924d5cc2c8bb8}{target\+
 \item 
 def \hyperlink{namespacemaster__node_a9494767e20dc61a10e137256d2b67fe9}{publish\+\_\+ag} ()
 \item 
-def \hyperlink{namespacemaster__node_aa380f26d72ff2ce61ff24f6f902f77cb}{check\+\_\+for\+\_\+input\+\_\+x} (input\+\_\+number\+\_\+x, exit=True)
+def \hyperlink{namespacemaster__node_a4fd98279c67cc84ca77711ee2941d683}{check\+\_\+for\+\_\+input\+\_\+x} (input\+\_\+number\+\_\+x)
 \item 
-def \hyperlink{namespacemaster__node_a5ae7433fe2f806e9c004f79b3417de18}{check\+\_\+for\+\_\+input\+\_\+y} (input\+\_\+number\+\_\+y, exit=True)
+def \hyperlink{namespacemaster__node_a4258710deedf0cd5532deab6761cbaa2}{check\+\_\+for\+\_\+input\+\_\+y} (input\+\_\+number\+\_\+y, \hyperlink{namespacemaster__node_a9ea1782ac4a7c8c92e8555fa503ac755}{x})
 \item 
 def \hyperlink{namespacemaster__node_a5bfa19ba31fffb842b2a34586ca8afff}{change\+\_\+state} ()
 \item 
 def \hyperlink{namespacemaster__node_a2ca55226f7fa9d0a646050f441478702}{main} ()
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Documentation for the main function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -50,6 +55,13 @@ list \hyperlink{namespacemaster__node_a8aa254dac660c2d7728f527c2226ed1b}{state\+
 \end{DoxyCompactItemize}
 
 
+\subsection{Detailed Description}
+Documentation for the \hyperlink{namespacemaster__node}{master\+\_\+node} module. 
+
+More details.
+
+It implements the structure of the entire architecture. It handles the simulation structure and it provides a way for checking the robot state. Then, it triggers the required service. 
+
 \subsection{Function Documentation}
 \index{master\+\_\+node@{master\+\_\+node}!change\+\_\+state@{change\+\_\+state}}
 \index{change\+\_\+state@{change\+\_\+state}!master\+\_\+node@{master\+\_\+node}}
@@ -60,39 +72,30 @@ list \hyperlink{namespacemaster__node_a8aa254dac660c2d7728f527c2226ed1b}{state\+
 )}\hypertarget{namespacemaster__node_a5bfa19ba31fffb842b2a34586ca8afff}{}\label{namespacemaster__node_a5bfa19ba31fffb842b2a34586ca8afff}
 
 
-Definition at line 130 of file master\+\_\+node.\+py.
+Definition at line 186 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!check\+\_\+for\+\_\+input\+\_\+x@{check\+\_\+for\+\_\+input\+\_\+x}}
 \index{check\+\_\+for\+\_\+input\+\_\+x@{check\+\_\+for\+\_\+input\+\_\+x}!master\+\_\+node@{master\+\_\+node}}
-\subsubsection[{\texorpdfstring{check\+\_\+for\+\_\+input\+\_\+x(input\+\_\+number\+\_\+x, exit=\+True)}{check_for_input_x(input_number_x, exit=True)}}]{\setlength{\rightskip}{0pt plus 5cm}def master\+\_\+node.\+check\+\_\+for\+\_\+input\+\_\+x (
+\subsubsection[{\texorpdfstring{check\+\_\+for\+\_\+input\+\_\+x(input\+\_\+number\+\_\+x)}{check_for_input_x(input_number_x)}}]{\setlength{\rightskip}{0pt plus 5cm}def master\+\_\+node.\+check\+\_\+for\+\_\+input\+\_\+x (
 \begin{DoxyParamCaption}
-\item[{}]{input\+\_\+number\+\_\+x, }
-\item[{}]{exit = {\ttfamily True}}
+\item[{}]{input\+\_\+number\+\_\+x}
 \end{DoxyParamCaption}
-)}\hypertarget{namespacemaster__node_aa380f26d72ff2ce61ff24f6f902f77cb}{}\label{namespacemaster__node_aa380f26d72ff2ce61ff24f6f902f77cb}
-\begin{DoxyVerb}Checks if the type of "input1" is a float and returns the value if so.
-Input:    input1 -- variable to check
-Output: val -- value of float
-\end{DoxyVerb}
- 
+)}\hypertarget{namespacemaster__node_a4fd98279c67cc84ca77711ee2941d683}{}\label{namespacemaster__node_a4fd98279c67cc84ca77711ee2941d683}
 
-Definition at line 88 of file master\+\_\+node.\+py.
+
+Definition at line 130 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!check\+\_\+for\+\_\+input\+\_\+y@{check\+\_\+for\+\_\+input\+\_\+y}}
 \index{check\+\_\+for\+\_\+input\+\_\+y@{check\+\_\+for\+\_\+input\+\_\+y}!master\+\_\+node@{master\+\_\+node}}
-\subsubsection[{\texorpdfstring{check\+\_\+for\+\_\+input\+\_\+y(input\+\_\+number\+\_\+y, exit=\+True)}{check_for_input_y(input_number_y, exit=True)}}]{\setlength{\rightskip}{0pt plus 5cm}def master\+\_\+node.\+check\+\_\+for\+\_\+input\+\_\+y (
+\subsubsection[{\texorpdfstring{check\+\_\+for\+\_\+input\+\_\+y(input\+\_\+number\+\_\+y, x)}{check_for_input_y(input_number_y, x)}}]{\setlength{\rightskip}{0pt plus 5cm}def master\+\_\+node.\+check\+\_\+for\+\_\+input\+\_\+y (
 \begin{DoxyParamCaption}
 \item[{}]{input\+\_\+number\+\_\+y, }
-\item[{}]{exit = {\ttfamily True}}
+\item[{}]{x}
 \end{DoxyParamCaption}
-)}\hypertarget{namespacemaster__node_a5ae7433fe2f806e9c004f79b3417de18}{}\label{namespacemaster__node_a5ae7433fe2f806e9c004f79b3417de18}
-\begin{DoxyVerb}Checks if the type of "input1" is a float and returns the value if so.
-Input:    input1 -- variable to check
-Output: val -- value of float
-\end{DoxyVerb}
- 
+)}\hypertarget{namespacemaster__node_a4258710deedf0cd5532deab6761cbaa2}{}\label{namespacemaster__node_a4258710deedf0cd5532deab6761cbaa2}
 
-Definition at line 109 of file master\+\_\+node.\+py.
+
+Definition at line 158 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!clbk\+\_\+odom@{clbk\+\_\+odom}}
 \index{clbk\+\_\+odom@{clbk\+\_\+odom}!master\+\_\+node@{master\+\_\+node}}
@@ -103,7 +106,7 @@ Definition at line 109 of file master\+\_\+node.\+py.
 )}\hypertarget{namespacemaster__node_a5b919927efce47b56b923447a6da9fab}{}\label{namespacemaster__node_a5b919927efce47b56b923447a6da9fab}
 
 
-Definition at line 52 of file master\+\_\+node.\+py.
+Definition at line 68 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!main@{main}}
 \index{main@{main}!master\+\_\+node@{master\+\_\+node}}
@@ -114,7 +117,11 @@ Definition at line 52 of file master\+\_\+node.\+py.
 )}\hypertarget{namespacemaster__node_a2ca55226f7fa9d0a646050f441478702}{}\label{namespacemaster__node_a2ca55226f7fa9d0a646050f441478702}
 
 
-Definition at line 226 of file master\+\_\+node.\+py.
+Documentation for the main function. 
+
+More details. 
+
+Definition at line 307 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!publish\+\_\+ag@{publish\+\_\+ag}}
 \index{publish\+\_\+ag@{publish\+\_\+ag}!master\+\_\+node@{master\+\_\+node}}
@@ -125,7 +132,7 @@ Definition at line 226 of file master\+\_\+node.\+py.
 )}\hypertarget{namespacemaster__node_a9494767e20dc61a10e137256d2b67fe9}{}\label{namespacemaster__node_a9494767e20dc61a10e137256d2b67fe9}
 
 
-Definition at line 71 of file master\+\_\+node.\+py.
+Definition at line 104 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!target\+\_\+distance@{target\+\_\+distance}}
 \index{target\+\_\+distance@{target\+\_\+distance}!master\+\_\+node@{master\+\_\+node}}
@@ -136,7 +143,7 @@ Definition at line 71 of file master\+\_\+node.\+py.
 )}\hypertarget{namespacemaster__node_a3488ca68ed6c44dc10a924d5cc2c8bb8}{}\label{namespacemaster__node_a3488ca68ed6c44dc10a924d5cc2c8bb8}
 
 
-Definition at line 58 of file master\+\_\+node.\+py.
+Definition at line 85 of file master\+\_\+node.\+py.
 
 
 
@@ -146,96 +153,96 @@ Definition at line 58 of file master\+\_\+node.\+py.
 \subsubsection[{\texorpdfstring{desired\+\_\+position\+\_\+}{desired_position_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+desired\+\_\+position\+\_\+ = Point()}\hypertarget{namespacemaster__node_a3f58d1e6990fe974becd8a318829da8a}{}\label{namespacemaster__node_a3f58d1e6990fe974becd8a318829da8a}
 
 
-Definition at line 32 of file master\+\_\+node.\+py.
+Definition at line 42 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!position\+\_\+@{position\+\_\+}}
 \index{position\+\_\+@{position\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{position\+\_\+}{position_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+position\+\_\+ = Point()}\hypertarget{namespacemaster__node_a2b8dbb239eb4afff7f8a9c3b753453b7}{}\label{namespacemaster__node_a2b8dbb239eb4afff7f8a9c3b753453b7}
 
 
-Definition at line 31 of file master\+\_\+node.\+py.
+Definition at line 40 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!pub\+\_\+cmdvel@{pub\+\_\+cmdvel}}
 \index{pub\+\_\+cmdvel@{pub\+\_\+cmdvel}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{pub\+\_\+cmdvel}{pub_cmdvel}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+pub\+\_\+cmdvel = None}\hypertarget{namespacemaster__node_af03f741dfc4d9a61fc42d34ab839fe6e}{}\label{namespacemaster__node_af03f741dfc4d9a61fc42d34ab839fe6e}
 
 
-Definition at line 20 of file master\+\_\+node.\+py.
+Definition at line 29 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!pub\+\_\+goalid@{pub\+\_\+goalid}}
 \index{pub\+\_\+goalid@{pub\+\_\+goalid}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{pub\+\_\+goalid}{pub_goalid}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+pub\+\_\+goalid = None}\hypertarget{namespacemaster__node_ad7127d88e820a8bf947a841356004bf6}{}\label{namespacemaster__node_ad7127d88e820a8bf947a841356004bf6}
 
 
-Definition at line 22 of file master\+\_\+node.\+py.
+Definition at line 31 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!pub\+\_\+mvbase@{pub\+\_\+mvbase}}
 \index{pub\+\_\+mvbase@{pub\+\_\+mvbase}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{pub\+\_\+mvbase}{pub_mvbase}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+pub\+\_\+mvbase = None}\hypertarget{namespacemaster__node_a9a27ed10dbb3608f8a22d7d2d8aa1efa}{}\label{namespacemaster__node_a9a27ed10dbb3608f8a22d7d2d8aa1efa}
 
 
-Definition at line 21 of file master\+\_\+node.\+py.
+Definition at line 30 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!srv\+\_\+client\+\_\+bug\+\_\+@{srv\+\_\+client\+\_\+bug\+\_\+}}
 \index{srv\+\_\+client\+\_\+bug\+\_\+@{srv\+\_\+client\+\_\+bug\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+bug\+\_\+}{srv_client_bug_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+srv\+\_\+client\+\_\+bug\+\_\+ = None}\hypertarget{namespacemaster__node_ae7e05351b023ff9491aab8db55411203}{}\label{namespacemaster__node_ae7e05351b023ff9491aab8db55411203}
 
 
-Definition at line 28 of file master\+\_\+node.\+py.
+Definition at line 37 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!srv\+\_\+client\+\_\+random\+\_\+@{srv\+\_\+client\+\_\+random\+\_\+}}
 \index{srv\+\_\+client\+\_\+random\+\_\+@{srv\+\_\+client\+\_\+random\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+random\+\_\+}{srv_client_random_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+srv\+\_\+client\+\_\+random\+\_\+ = None}\hypertarget{namespacemaster__node_a042ea25cd5902ccb0c1d8e6b752b32cd}{}\label{namespacemaster__node_a042ea25cd5902ccb0c1d8e6b752b32cd}
 
 
-Definition at line 27 of file master\+\_\+node.\+py.
+Definition at line 36 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!srv\+\_\+client\+\_\+ui\+\_\+@{srv\+\_\+client\+\_\+ui\+\_\+}}
 \index{srv\+\_\+client\+\_\+ui\+\_\+@{srv\+\_\+client\+\_\+ui\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+ui\+\_\+}{srv_client_ui_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+srv\+\_\+client\+\_\+ui\+\_\+ = None}\hypertarget{namespacemaster__node_aa24ec2707042d83db651789d2416066f}{}\label{namespacemaster__node_aa24ec2707042d83db651789d2416066f}
 
 
-Definition at line 26 of file master\+\_\+node.\+py.
+Definition at line 35 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+@{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+}}
 \index{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+@{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+}{srv_client_wall_follower_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+ = None}\hypertarget{namespacemaster__node_afde90e85906bb75fd698d31876e4060a}{}\label{namespacemaster__node_afde90e85906bb75fd698d31876e4060a}
 
 
-Definition at line 25 of file master\+\_\+node.\+py.
+Definition at line 34 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!state\+\_\+@{state\+\_\+}}
 \index{state\+\_\+@{state\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{state\+\_\+}{state_}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+state\+\_\+ = rospy.\+get\+\_\+param(\textquotesingle{}state\textquotesingle{})}\hypertarget{namespacemaster__node_aceeacc0099424e36d80c5c244ed91886}{}\label{namespacemaster__node_aceeacc0099424e36d80c5c244ed91886}
 
 
-Definition at line 43 of file master\+\_\+node.\+py.
+Definition at line 53 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!state\+\_\+desc\+\_\+@{state\+\_\+desc\+\_\+}}
 \index{state\+\_\+desc\+\_\+@{state\+\_\+desc\+\_\+}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{state\+\_\+desc\+\_\+}{state_desc_}}]{\setlength{\rightskip}{0pt plus 5cm}list master\+\_\+node.\+state\+\_\+desc\+\_\+ = \mbox{[}\textquotesingle{}move randomly\textquotesingle{}, \textquotesingle{}target postion\textquotesingle{}, \textquotesingle{}walls following\textquotesingle{}, \textquotesingle{}stop\textquotesingle{},\textquotesingle{}bug\textquotesingle{}\mbox{]}}\hypertarget{namespacemaster__node_a8aa254dac660c2d7728f527c2226ed1b}{}\label{namespacemaster__node_a8aa254dac660c2d7728f527c2226ed1b}
 
 
-Definition at line 40 of file master\+\_\+node.\+py.
+Definition at line 50 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!x@{x}}
 \index{x@{x}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{x}{x}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+x}\hypertarget{namespacemaster__node_a9ea1782ac4a7c8c92e8555fa503ac755}{}\label{namespacemaster__node_a9ea1782ac4a7c8c92e8555fa503ac755}
 
 
-Definition at line 33 of file master\+\_\+node.\+py.
+Definition at line 44 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!y@{y}}
 \index{y@{y}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{y}{y}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+y}\hypertarget{namespacemaster__node_ac413c2def2fcd170aa78888c2e13b0ce}{}\label{namespacemaster__node_ac413c2def2fcd170aa78888c2e13b0ce}
 
 
-Definition at line 34 of file master\+\_\+node.\+py.
+Definition at line 45 of file master\+\_\+node.\+py.
 
 \index{master\+\_\+node@{master\+\_\+node}!z@{z}}
 \index{z@{z}!master\+\_\+node@{master\+\_\+node}}
 \subsubsection[{\texorpdfstring{z}{z}}]{\setlength{\rightskip}{0pt plus 5cm}master\+\_\+node.\+z}\hypertarget{namespacemaster__node_a0aa1d242f836be42c9db48fd53ee63f4}{}\label{namespacemaster__node_a0aa1d242f836be42c9db48fd53ee63f4}
 
 
-Definition at line 35 of file master\+\_\+node.\+py.
+Definition at line 46 of file master\+\_\+node.\+py.
 
