@@ -124,6 +124,19 @@ They are contained in the [launch](https://github.com/fedehub/final_assignment/t
   * `state` for individuating the current state (between _1 and 5_) of the robot
   * `change_state` for initialising at _zero_ the current state of our robot. It has been proven very useful during the implementation of the **bug algorithm**
 
+## Rqt-graph (ROS tool)
+
+By running the following command:
+
+```
+rosrun rqt_graph rqt_graph
+
+```
+it is possible to show a dynamic graph, depicting what is going on within the System.
+
+![rqt_graph](https://github.com/fedehub/final_assignment/blob/main/rqt_graph/rosgraph2.png "Rqt_graph second assignment")
+
+
 # How to launch
 
 1. Firstly, create a folder named _"final_assignment"_
@@ -155,6 +168,10 @@ roslaunch final_assignment node_master.launch
 The documentation of this project, obtained by means of **DoxyGen** is visible, within the [docs](https://github.com/fedehub/final_assignment/tree/main/docs) folder
 
 ## System limitation's and possible Improvements
+
+
+The `state 1` behaviour can be implemented so that the move_base should be capable of publishing continuously random position without blocking. 
+
 
 
 ## Release History
